@@ -7,7 +7,9 @@ class Background extends MovableObject {
 
     /* #############################################   Funktionen   ############################################# */
 
-    constructor(backgroundPath) {
+    constructor(backgroundPath, x, y) {
         super().loadImg(backgroundPath);
+        this.x = x;
+        this.y = y;
     }
 }

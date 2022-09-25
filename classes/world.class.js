@@ -1,40 +1,37 @@
 class World {
     character = new Character();
-    enemies = [
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-    ];
-    clouds = [
-        new Cloud(),
-    ];
-    background = [
-        new Background('assets/img/5_background/layers/air.png'),
-        new Background('assets/img/5_background/layers/3_third_layer/1.png'),
-        new Background('assets/img/5_background/layers/2_second_layer/1.png'),
-        new Background('assets/img/5_background/layers/1_first_layer/1.png'),
-    ];
+    level = level1;
 
     /* ########################################################################################################## */
 
-    canvas;
-    ctx;
+    canvas; // variable canvas
+    ctx; //variable ctx
+    keyboard; //variable keyboard
+    cameraX = 0;
 
     /* #############################################   Funktionen   ############################################# */
 
-    constructor(canvas) {
-        this.ctx = canvas.getContext('2d');
-        this.canvas = canvas;
-        this.draw();
+    constructor(canvas, keyboard) {
+        this.ctx = canvas.getContext('2d'); // macht den canvas zu einer 2d Karte und fügt sie der variable ctx zu
+        this.canvas = canvas; // Definiert den canvas in der variable canvas
+        this.keyboard = keyboard; // Definiert den keyboard in der variable keyboard
+        this.draw(); // startet die Funktion Draw()
+        this.setWorld();
+    }
+
+    setWorld() {
+        this.character.world = this;
     }
 
     draw() {
         //leert den canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        this.ctx.translate(this.cameraX, 0);
+
         /** Background
          * zeigt den Background an*/
-        this.addArrayToMap(this.background);
+        this.addArrayToMap(this.level.background);
 
         /** Character
          * zeigt den Character an*/
@@ -42,11 +39,13 @@ class World {
 
         /**Enemies
          * geht mit einer for schleife durch alle enemies und zeigt sie an*/
-        this.addArrayToMap(this.enemies);
+        this.addArrayToMap(this.level.enemies);
 
         /**Clouds
          * geht mit einer for schleife durch alle clouds und zeigt sie an*/
-        this.addArrayToMap(this.clouds);
+        this.addArrayToMap(this.level.clouds);
+
+        this.ctx.translate(-this.cameraX, 0);
 
         //lädt die funktion neu
         let self = this;
@@ -74,6 +73,18 @@ class World {
      * @param {object} object // z.b. this.character
      */
     addObjectToMap(object) {
+        // wenn PEPE nach links läuft spiegelt sich das Bild
+        // weil der Charakter das einzige Element ist das kein Array ist, wird nur er gespiegelt 
+        if (object.otherDirection) {
+            this.ctx.save();
+            this.ctx.translate(object.width, 0);
+            this.ctx.scale(-1, 1);
+            object.x = object.x * -1;
+        }
         this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
+        if (object.otherDirection) {
+            this.ctx.restore();
+            object.x = object.x * -1;
+        }
     }
 }
