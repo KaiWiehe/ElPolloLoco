@@ -35,6 +35,7 @@ class Character extends MovableObject {
         this.loadImgArray(this.imagesWalking);
         this.loadImgArray(this.imagesJumping);
         this.animate();
+        this.applyGravity()
     }
 
     animate() {
@@ -55,17 +56,22 @@ class Character extends MovableObject {
             this.world.cameraX = 120 + -this.x;
         }, 1000 / 60)
         setInterval(() => {
-            if (this.world.keyboard.right || this.world.keyboard.left) {
-                // Walk animation
-                this.playAnimation(this.imagesWalking);
+            if (this.isCharacterInAir()) {
+                //     // Jump animation
+                //     this.playAnimation(this.imagesJumping);
+            } else { // Character on the Ground
+                if (this.world.keyboard.right || this.world.keyboard.left) {
+                    // Walk animation
+                    this.playAnimation(this.imagesWalking);
+                } else {
+                    this.loadImg('assets/img/2_character_pepe/1_idle/idle/I-1.png'); // wenn er stehen bleibt zeigt er das Bild an
+                }
+                if (this.world.keyboard.space) {
+                    this.playAnimation(this.imagesJumping);
+                    this.speedY = 20;
+                }
             }
-            if (this.world.keyboard.space === true) {
-                // Jump animation
-                let i = this.currentImg % this.imagesJumping.length;
-                let path = this.imagesJumping[i];
-                this.img = this.imageCache[path];
-                this.currentImg++;
-            }
+
 
         }, 100)
     }

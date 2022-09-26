@@ -1,6 +1,6 @@
 class MovableObject {
     x = 120;
-    y = 265;
+    y = 200; // 
     img;
     height = 150;
     width = 80;
@@ -11,6 +11,10 @@ class MovableObject {
     imageCache = {};
 
     otherDirection = false;
+
+    //Gravitation
+    speedY = -1;
+    acceleration = 2;
 
     /* #############################################   Funktionen   ############################################# */
 
@@ -43,5 +47,23 @@ class MovableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImg++;
+    }
+
+    //Gravitation
+    applyGravity() {
+        setInterval(() => {
+            if (this.isCharacterInAir() || this.speedY > 0) {
+
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            }
+            if (this.y >= 266) {
+                this.speedY = 0
+            } //Wenn er auf dem Boden ist setzt sich der wert wieder zurück
+        }, 1000 / 25)
+    }
+
+    isCharacterInAir() {
+        return this.y < 265;
     }
 }
