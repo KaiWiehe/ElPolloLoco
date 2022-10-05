@@ -17,6 +17,8 @@ class Cloud extends MovableObject {
 
     /** Lässt die Wolken langsam nach links bewegen */
     animate() {
-        this.moveLeft();
+        setInterval(() => {
+            this.moveLeft();
+        }, 1000 / 60)
     }
 }

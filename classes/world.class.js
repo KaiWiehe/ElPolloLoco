@@ -17,10 +17,23 @@ class World {
         this.keyboard = keyboard; // Definiert den keyboard in der variable keyboard
         this.draw(); // startet die Funktion Draw()
         this.setWorld();
+        this.checkCollosion();
+    }
+
+    checkCollosion() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+
+                if (this.character.isColliding(enemy)) {
+                    this.character.hit();
+                    console.log(this.character.energy);
+                }
+            })
+        }, 100);
     }
 
     setWorld() {
-        this.character.world = this;
+        this.character.world = this; // Damit im Character die Variable World genau das hier ist
     }
 
     draw() {
@@ -75,16 +88,29 @@ class World {
     addObjectToMap(object) {
         // wenn PEPE nach links läuft spiegelt sich das Bild
         // weil der Charakter das einzige Element ist das kein Array ist, wird nur er gespiegelt 
-        if (object.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(object.width, 0);
-            this.ctx.scale(-1, 1);
-            object.x = object.x * -1;
+        if (this.isWalkingLeft(object)) {
+            this.flipImg(object);
         }
-        this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
-        if (object.otherDirection) {
-            this.ctx.restore();
-            object.x = object.x * -1;
+        object.draw(this.ctx);
+        object.drawFrame(this.ctx);
+        if (this.isWalkingLeft(object)) {
+            this.flipImgBack(object);
         }
+    }
+
+    isWalkingLeft(object) {
+        return object.otherDirection;
+    }
+
+    flipImg(object) {
+        this.ctx.save();
+        this.ctx.translate(object.width, 0);
+        this.ctx.scale(-1, 1);
+        object.x = object.x * -1;
+    }
+
+    flipImgBack(object) {
+        this.ctx.restore();
+        object.x = object.x * -1;
     }
 }
