@@ -37,7 +37,7 @@ class Character extends MovableObject {
     // ##########################################################################################################
 
     speed = 3;
-    world;
+    //world;
 
     walkingSound = new Audio('assets/audio/walking.mp3');
     walkingSoundSlow = this.walkingSound.playbackRate = 0.5; // Abspielgeschwindigkeit
@@ -67,19 +67,40 @@ class Character extends MovableObject {
             this.walkingSound.pause();
             if (this.world.keyboard.right && this.x < this.world.level.levelEnd) {
                 this.moveRight();
+                //this.world.level.statBar[0].moveRight();
+                //this.world.level.statBar[1].moveRight();
+                //this.world.level.statBar[2].moveRight();
                 this.otherDirection = false;
                 //TODO this.walkingSound.play();
             }
             if (this.world.keyboard.left && this.x > 0) {
                 this.moveLeft();
+                //this.world.level.statBar[0].moveLeft();
+                //this.world.level.statBar[1].moveLeft();
+                //this.world.level.statBar[2].moveLeft();
                 this.otherDirection = true;
                 //TODO this.walkingSound.play();
             }
+            if (this.world.keyboard.space && !this.isCharacterInAir()) {
+                this.jump();
+            }
             // damit er nicht am linken Rand klebt muss ich hier den x-Wert aus der Klasse MO gebens
             // damit er einen abstand zum Linken Rand hat 
+            // Das macht das sich nur die Kamera bewegt
             this.world.cameraX = 120 + -this.x;
         }, 1000 / 60);
 
+        setInterval(() => { // muss in eine andere schleife weil die andere zu schnell ist, da wirft er eine ganze schlange von flaschen
+            if (this.world.keyboard.shot) {
+                if (this.world.bottleCounter > 0) {
+                    let bottle = new ThrowableObjects(this.x + 20, this.y + 40); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
+                    world.throwableObjects.push(bottle);
+                    this.world.bottleCounter -= 10;
+                    this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
+                    console.log(this.world.bottleCounter);
+                }
+            }
+        }, 100);
         // Animationen
         setInterval(() => {
             if (this.isDead()) {
@@ -97,9 +118,6 @@ class Character extends MovableObject {
                 } else { // Wenn er stehen bleibt
                     this.currentImg = 0; // wenn er stehen bleibt setzt sich der wert wieder auf 0 damit er beim erneuten loslaufen wieder beim ersten Bild anfängt
                     this.loadImg('assets/img/2_character_pepe/1_idle/idle/I-1.png'); // wenn er stehen bleibt zeigt er das Bild an
-                }
-                if (this.world.keyboard.space) {
-                    this.jump();
                 }
             }
         }, 105);

@@ -1,6 +1,10 @@
 class World {
     character = new Character();
     level = level1;
+    statBarHealth = new StatBarHealth();
+    statBarCoin = new StatBarCoin();
+    statBarBottle = new StatBarBottle();
+    throwableObjects = [];
 
     /* ########################################################################################################## */
 
@@ -8,6 +12,9 @@ class World {
     ctx; //variable ctx
     keyboard; //variable keyboard
     cameraX = 0;
+
+    coinCounter = 0;
+    bottleCounter = 0;
 
     /* #############################################   Funktionen   ############################################# */
 
@@ -23,10 +30,30 @@ class World {
     checkCollosion() {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
-                    console.log(this.character.energy);
+                    console.log('Energy', this.character.energy);
+                    this.statBarHealth.setHealthPersentage(this.character.energy); // Zieht der StatBar leben ab, Zeigt also das richtige bild je nach Lebensprozent
+                }
+            });
+            //Coins
+            this.level.coin.forEach((coin) => {
+                if (this.character.isColliding(coin)) {
+                    coin.width = 0;
+                    coin.height = 0; // TODO geht bestimmt schöner
+                    this.coinCounter += 10;
+                    console.log('coinCounter', this.coinCounter);
+                    this.statBarCoin.setCoinPersentage(this.coinCounter);
+                }
+            });
+            //bottle
+            this.level.bottle.forEach((bottle) => {
+                if (this.character.isColliding(bottle)) {
+                    bottle.width = 0;
+                    bottle.height = 0; // TODO geht bestimmt schöner
+                    this.bottleCounter += 10;
+                    console.log('bottleCounter', this.bottleCounter);
+                    this.statBarBottle.setBottlePersentage(this.bottleCounter);
                 }
             })
         }, 100);
@@ -40,8 +67,8 @@ class World {
         //leert den canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // ist dafür da das sich die Kamera bewegt und nicht der Character
         this.ctx.translate(this.cameraX, 0);
-
         /** Background
          * zeigt den Background an*/
         this.addArrayToMap(this.level.background);
@@ -58,6 +85,36 @@ class World {
          * geht mit einer for schleife durch alle clouds und zeigt sie an*/
         this.addArrayToMap(this.level.clouds);
 
+        /** Coin
+         * zeigt den Coin an*/
+        this.addArrayToMap(this.level.coin);
+
+        /** bottle
+         * zeigt den bottle an*/
+        this.addArrayToMap(this.level.bottle);
+
+        /** bottle
+         * zeigt den bottle an*/
+        this.addArrayToMap(this.throwableObjects);
+
+
+        this.ctx.translate(-this.cameraX, 0);
+        //------------------------Space for fix Objects------------------------
+        /** StatBarHealth
+         * zeigt den StatBar an*/
+        this.addObjectToMap(this.statBarHealth);
+
+        /** StatBarCoin
+         * zeigt den StatBar an*/
+        this.addObjectToMap(this.statBarCoin);
+
+        /** StatBarBottle
+         * zeigt den StatBar an*/
+        this.addObjectToMap(this.statBarBottle);
+        //------------------------End------------------------
+        this.ctx.translate(this.cameraX, 0);
+
+        // ist dafür da das sich die Kamera bewegt und nicht der Character  
         this.ctx.translate(-this.cameraX, 0);
 
         //lädt die funktion neu

@@ -5,8 +5,6 @@ class Cloud extends MovableObject {
     width = 500;
     height = 300;
 
-
-
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {

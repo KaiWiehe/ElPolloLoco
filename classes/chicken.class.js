@@ -1,5 +1,5 @@
 class Chicken extends MovableObject {
-    x = 300 + Math.random() * 400;
+    x = 300 + Math.random() * 2000;
     y = 380;
     height = 50;
     width = 50;
@@ -20,12 +20,12 @@ class Chicken extends MovableObject {
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {
-        super().loadImg(this.imagesWalking[0]);
-        this.loadImgArray(this.imagesWalking);
-        this.animate();
-        //this.speed = 0.15 + Math.random() * 0.25; TODO
-    }
-    speed = 0; //TODO
+            super().loadImg(this.imagesWalking[0]);
+            this.loadImgArray(this.imagesWalking);
+            this.animate();
+            this.speed = 0.15 + Math.random() * 0.25;
+        }
+        //speed = 0; //TODO
 
     animate() {
         setInterval(() => {
