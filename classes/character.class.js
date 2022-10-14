@@ -87,7 +87,7 @@ class Character extends MovableObject {
         setInterval(() => { // muss in eine andere schleife weil die andere zu schnell ist, da wirft er eine ganze schlange von flaschen
             if (this.world.keyboard.shot) {
                 if (this.world.bottleCounter > 0) {
-                    let bottle = new ThrowableObjects(this.x + 20, this.y + 40); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
+                    let bottle = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
                     world.throwableObjects.push(bottle);
                     this.world.bottleCounter -= 10;
                     this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);

@@ -8,6 +8,7 @@ class drawableObjects {
     currentImg = 0;
     currentImgJumping = 0;
     currentImgEndboss = 0;
+    currentImgBottle = 0;
 
     imageCache = {};
 
@@ -69,11 +70,19 @@ class drawableObjects {
         }
     }
 
-    loadCoinOrBottle(path, width, height) {
+    loadCoinOrBottle(path, width, height, coinOrBottle) {
         this.loadImg(path);
         this.x = 300 + Math.random() * 2000;
-        this.y = 80 + Math.random() * 250;
+        if (coinOrBottle === 'coin') {
+            this.y = 80 + Math.random() * 250;
+        } else {
+            this.y = 350;
+        }
         this.width = width;
         this.height = height;
+    }
+
+    randomNumber(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min)
     }
 }

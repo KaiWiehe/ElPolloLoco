@@ -1,11 +1,15 @@
 class CheckCollosion {
 
     world;
-    endboss = world.level.endboss[0];
+    endboss;
+    chicken;
 
-    constructor() {
+    constructor(world) {
+        this.world = world;
         this.checkCollosion();
         this.checkEndbossDead();
+        this.endboss = this.world.level.endboss[0];
+        this.chicken = this.world.level.chickens;
     }
 
     checkCollosion() {
@@ -23,8 +27,8 @@ class CheckCollosion {
 
     /** if you hit the chicken with your body, you will lose energy */
     collosionCharacterChicken() {
-        this.level.chickens.forEach((chicken) => {
-            if (this.character.isColliding(chicken)) {
+        this.world.level.chickens.forEach((chicken) => {
+            if (this.world.character.isColliding(chicken)) {
                 if (!chicken.dead) { // wenn das chicken noch lebt
                     this.CharacterLoseEnergy();
                 }
@@ -34,8 +38,8 @@ class CheckCollosion {
 
     /** if you hit the endboss with your body, you will lose energy */
     collisionCharacterEndboss() {
-        this.level.endboss.forEach((endboss) => {
-            if (this.character.isColliding(endboss)) {
+        this.world.level.endboss.forEach((endboss) => {
+            if (this.world.character.isColliding(endboss)) {
                 if (!endboss.dead) { // wenn das chicken noch lebt
                     this.CharacterLoseEnergy();
                 }
@@ -45,36 +49,36 @@ class CheckCollosion {
 
     /** if you collect a coin, it will be invisible. And add the coin to your counter */
     collisionCharacterCoin() {
-        this.level.coin.forEach((coin) => {
-            if (this.character.isColliding(coin)) {
+        this.world.level.coin.forEach((coin) => {
+            if (this.world.character.isColliding(coin)) {
                 this.invisible(coin);
-                this.coinCounter += 10;
-                this.statBarCoin.setCoinPersentage(this.coinCounter);
+                this.world.coinCounter += 10;
+                this.world.statBarCoin.setCoinPersentage(this.world.coinCounter);
             }
         });
     }
 
     /** if you collect a bottle, it will be invisible. And add the bottle to your counter */
     collisionCharacterBottle() {
-        this.level.bottle.forEach((bottle) => {
-            if (this.character.isColliding(bottle)) {
+        this.world.level.bottle.forEach((bottle) => {
+            if (this.world.character.isColliding(bottle)) {
                 this.invisible(bottle);
-                this.bottleCounter += 10;
-                this.statBarBottle.setBottlePersentage(this.bottleCounter);
+                this.world.bottleCounter += 10;
+                this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
             }
         });
     }
 
     /** check if you shot a chicken, show the dead chicken IMG */
     shotChicken() {
-        this.throwableObjects.forEach((bottle) => {
-            for (let i = 0; i < this.level.chickens.length; i++) {
-                if (this.level.chickens[i].isColliding(bottle)) {
-                    this.level.chickens[i].loadImg('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
-                    this.level.chickens[i].speed = 0;
-                    clearInterval(this.level.chickens[i].moveLeftInterval); //stoppt die Intervalle
-                    clearInterval(this.level.chickens[i].playAnimationInterval); //stoppt die Intervalle
-                    this.level.chickens[i].dead = true; // damit der keinen schaden mehr macht
+        this.world.throwableObjects.forEach((bottle) => {
+            for (let i = 0; i < this.chicken.length; i++) {
+                if (this.chicken[i].isColliding(bottle)) {
+                    this.chicken[i].loadImg('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+                    this.chicken[i].speed = 0;
+                    clearInterval(this.chicken[i].moveLeftInterval); //stoppt die Intervalle
+                    clearInterval(this.chicken[i].playAnimationInterval); //stoppt die Intervalle
+                    this.chicken[i].dead = true; // damit der keinen schaden mehr macht
                 }
             }
         })
@@ -82,7 +86,7 @@ class CheckCollosion {
 
     /** check if you shot the endboss and reduce the energy */
     shotEndboss() {
-        this.throwableObjects.forEach((bottle) => {
+        this.world.throwableObjects.forEach((bottle) => {
             if (this.endboss.isColliding(bottle)) {
                 this.endboss.hit();
                 console.log('endboss:', this.endboss.energy);
@@ -97,8 +101,8 @@ class CheckCollosion {
     /** check if endboss is dead and play dead animation */
     checkEndbossDead() {
         setInterval(() => {
-            if (this.endboss.dead && this.endboss.currentImgEndboss <= 2) {
-                this.endboss.playAnimationEndboss(this.level.endboss[0].imagesDead);
+            if (this.endboss.dead && this.endboss.currentImgEndboss <= 2) { // er soll nach dem dritten Bild wieder aufhören
+                this.endboss.playAnimationEndboss(this.world.level.endboss[0].imagesDead);
             }
         }, 200);
         setInterval(() => {
@@ -115,8 +119,8 @@ class CheckCollosion {
     }
 
     CharacterLoseEnergy() {
-        this.character.hit();
-        this.statBarHealth.setHealthPersentage(this.character.energy); // Zieht der StatBar leben ab, Zeigt also das richtige bild je nach Lebensprozent
+        this.world.character.hit();
+        this.world.statBarHealth.setHealthPersentage(this.world.character.energy); // Zieht der StatBar leben ab, Zeigt also das richtige bild je nach Lebensprozent
     }
 
 }

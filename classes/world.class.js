@@ -6,7 +6,7 @@ class World { //TODO extends CheckCollosion
     statBarBottle = new StatBarBottle();
     statBarEndboss = new StatBarEndboss();
     throwableObjects = [];
-    checkCollosion = new CheckCollosion();
+    checkCollosion = new CheckCollosion(this);
 
     /* ########################################################################################################## */
 
@@ -33,7 +33,7 @@ class World { //TODO extends CheckCollosion
     // Damit im Character die Variable World genau das hier ist
     setWorld() {
         this.character.world = this;
-        this.checkCollosion.world = this;
+        //this.checkCollosion.world = this;
     }
 
     draw() {
@@ -50,6 +50,10 @@ class World { //TODO extends CheckCollosion
          * zeigt den Character an*/
         this.addObjectToMap(this.character)
 
+        /** bottle
+         * zeigt den bottle an*/
+        this.addArrayToMap(this.level.bottle);
+
         /**chickens
          * geht mit einer for schleife durch alle chickens und zeigt sie an*/
         this.addArrayToMap(this.level.chickens);
@@ -65,10 +69,6 @@ class World { //TODO extends CheckCollosion
         /** Coin
          * zeigt den Coin an*/
         this.addArrayToMap(this.level.coin);
-
-        /** bottle
-         * zeigt den bottle an*/
-        this.addArrayToMap(this.level.bottle);
 
         /** bottle
          * zeigt den bottle an*/

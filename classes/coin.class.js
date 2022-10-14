@@ -8,6 +8,6 @@ class Coin extends drawableObjects {
     }
 
     constructor() {
-        super().loadCoinOrBottle('assets/img/8_coin/coin_1.png', 150, 150);
+        super().loadCoinOrBottle('assets/img/8_coin/coin_1.png', 150, 150, 'coin');
     }
 }
