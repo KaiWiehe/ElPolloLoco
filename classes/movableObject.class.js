@@ -38,6 +38,14 @@ class MovableObject extends drawableObjects {
         this.currentImg++;
     }
 
+
+    playAnimationEndboss(images) {
+        let i = this.currentImgEndboss % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImgEndboss++;
+    }
+
     //Gravitation
     applyGravity() {
         setInterval(() => {

@@ -1,66 +1,39 @@
-class World {
+class World { //TODO extends CheckCollosion
     character = new Character();
     level = level1;
     statBarHealth = new StatBarHealth();
     statBarCoin = new StatBarCoin();
     statBarBottle = new StatBarBottle();
+    statBarEndboss = new StatBarEndboss();
     throwableObjects = [];
+    checkCollosion = new CheckCollosion();
 
     /* ########################################################################################################## */
 
-    canvas; // variable canvas
-    ctx; //variable ctx
-    keyboard; //variable keyboard
+    canvas;
+    ctx;
+    keyboard;
     cameraX = 0;
 
     coinCounter = 0;
     bottleCounter = 0;
 
+
+
     /* #############################################   Funktionen   ############################################# */
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d'); // macht den canvas zu einer 2d Karte und fügt sie der variable ctx zu
-        this.canvas = canvas; // Definiert den canvas in der variable canvas
-        this.keyboard = keyboard; // Definiert den keyboard in der variable keyboard
-        this.draw(); // startet die Funktion Draw()
+        this.canvas = canvas;
+        this.keyboard = keyboard;
+        this.draw();
         this.setWorld();
-        this.checkCollosion();
     }
 
-    checkCollosion() {
-        setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    console.log('Energy', this.character.energy);
-                    this.statBarHealth.setHealthPersentage(this.character.energy); // Zieht der StatBar leben ab, Zeigt also das richtige bild je nach Lebensprozent
-                }
-            });
-            //Coins
-            this.level.coin.forEach((coin) => {
-                if (this.character.isColliding(coin)) {
-                    coin.width = 0;
-                    coin.height = 0; // TODO geht bestimmt schöner
-                    this.coinCounter += 10;
-                    console.log('coinCounter', this.coinCounter);
-                    this.statBarCoin.setCoinPersentage(this.coinCounter);
-                }
-            });
-            //bottle
-            this.level.bottle.forEach((bottle) => {
-                if (this.character.isColliding(bottle)) {
-                    bottle.width = 0;
-                    bottle.height = 0; // TODO geht bestimmt schöner
-                    this.bottleCounter += 10;
-                    console.log('bottleCounter', this.bottleCounter);
-                    this.statBarBottle.setBottlePersentage(this.bottleCounter);
-                }
-            })
-        }, 100);
-    }
-
+    // Damit im Character die Variable World genau das hier ist
     setWorld() {
-        this.character.world = this; // Damit im Character die Variable World genau das hier ist
+        this.character.world = this;
+        this.checkCollosion.world = this;
     }
 
     draw() {
@@ -77,9 +50,13 @@ class World {
          * zeigt den Character an*/
         this.addObjectToMap(this.character)
 
-        /**Enemies
-         * geht mit einer for schleife durch alle enemies und zeigt sie an*/
-        this.addArrayToMap(this.level.enemies);
+        /**chickens
+         * geht mit einer for schleife durch alle chickens und zeigt sie an*/
+        this.addArrayToMap(this.level.chickens);
+
+        /**endboss
+         * geht mit einer for schleife durch alle endboss und zeigt sie an*/
+        this.addArrayToMap(this.level.endboss);
 
         /**Clouds
          * geht mit einer for schleife durch alle clouds und zeigt sie an*/
@@ -111,6 +88,10 @@ class World {
         /** StatBarBottle
          * zeigt den StatBar an*/
         this.addObjectToMap(this.statBarBottle);
+
+        /** StatBarEndboss
+         * zeigt den StatBar an*/
+        this.addObjectToMap(this.statBarEndboss);
         //------------------------End------------------------
         this.ctx.translate(this.cameraX, 0);
 
@@ -149,7 +130,7 @@ class World {
             this.flipImg(object);
         }
         object.draw(this.ctx);
-        object.drawFrame(this.ctx);
+        //object.drawFrame(this.ctx);
         if (this.isWalkingLeft(object)) {
             this.flipImgBack(object);
         }

@@ -7,6 +7,7 @@ class drawableObjects {
 
     currentImg = 0;
     currentImgJumping = 0;
+    currentImgEndboss = 0;
 
     imageCache = {};
 
@@ -41,7 +42,7 @@ class drawableObjects {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Coin || this instanceof Bottle) { // zeigt den Ramen nur beim Character und beim Chicken an
+        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Coin || this instanceof Bottle || this instanceof ThrowableObjects) { // zeigt den Ramen nur beim Character und beim Chicken an
             ctx.beginPath();
             ctx.lineWidth = "1";
             ctx.strokeStyle = "blue";
