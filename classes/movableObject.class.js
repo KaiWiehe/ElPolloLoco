@@ -1,7 +1,7 @@
 class MovableObject extends drawableObjects {
     speed = 0.15;
     energy = 100;
-    damage = 5;
+    damage = 0.5;
 
     otherDirection = false;
 

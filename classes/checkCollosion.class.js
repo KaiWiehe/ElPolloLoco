@@ -21,20 +21,45 @@ class CheckCollosion {
 
             this.shotChicken(); // Bottle => Chicken
             this.shotEndboss(); // Bottle => Endboss
-        }, 100);
+        }, 10);
     }
 
-
-    /** if you hit the chicken with your body, you will lose energy */
+    /** if you hit the chicken with your body, you will lose energy.
+     * if you hit the chicken with your body and you are in the air, the chicken will die*/
     collosionCharacterChicken() {
         this.world.level.chickens.forEach((chicken) => {
-            if (this.world.character.isColliding(chicken)) {
+            if (this.world.character.isColliding(chicken) && this.world.character.isCharacterInAir()) {
+                if (!chicken.dead) {
+                    chicken.loadImg('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+                    chicken.speed = 0;
+                    clearInterval(chicken.moveLeftInterval); //stoppt die Intervalle
+                    clearInterval(chicken.playAnimationInterval); //stoppt die Intervalle
+                    chicken.dead = true; // damit der keinen schaden mehr macht
+                    this.world.character.speedY = 10;
+                }
+            } else if (this.world.character.isColliding(chicken)) {
                 if (!chicken.dead) { // wenn das chicken noch lebt
                     this.CharacterLoseEnergy();
                 }
             }
         });
     }
+
+    // //if (this.character.isColliding(enemy) && this.character.isAboveGround() && (enemy instanceof Chicken || enemy instanceof ChickenSmall)) {
+    //     if (enemy instanceof Chicken) {
+    //         enemy.playAnimation(this.chicken.IMAGES_DEAD)
+    //         enemy.stopAnimation()
+    //         enemy.dead = true
+    //         this.chicken_sound.play()
+    //     }
+
+    //     if (enemy instanceof ChickenSmall) {
+    //         enemy.playAnimation(this.ChickenSmall.IMAGES_DEAD)
+    //         enemy.stopAnimation()
+    //         enemy.dead = true
+    //         this.chicken_sound.play()
+    //     }
+    // }
 
     /** if you hit the endboss with your body, you will lose energy */
     collisionCharacterEndboss() {
@@ -89,10 +114,12 @@ class CheckCollosion {
         this.world.throwableObjects.forEach((bottle) => {
             if (this.endboss.isColliding(bottle)) {
                 this.endboss.hit();
-                console.log('endboss:', this.endboss.energy);
                 if (this.endboss.energy <= 0) {
                     clearInterval(this.endboss.playAnimationInterval); //stoppt die Intervalle
                     this.endboss.dead = true; // damit der keinen schaden mehr macht
+                    setTimeout(() => {
+                        gameOver();
+                    }, 1500);
                 }
             }
         })

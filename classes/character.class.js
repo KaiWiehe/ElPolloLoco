@@ -49,6 +49,10 @@ class Character extends MovableObject {
         right: 20
     }
 
+    bottleShortOrLong;
+
+    timeout = false;
+
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {
@@ -64,31 +68,45 @@ class Character extends MovableObject {
     animate() {
         //Bewegung und Sound
         setInterval(() => {
-            this.walkingSound.pause();
-            if (this.world.keyboard.right && this.x < this.world.level.levelEnd) {
-                this.moveRight();
-                this.otherDirection = false;
-                //TODO this.walkingSound.play();
+            if (play) {
+                this.walkingSound.pause();
+                if (this.world.keyboard.right && this.x < this.world.level.levelEnd) {
+                    this.moveRight();
+                    this.otherDirection = false;
+                    //TODO this.walkingSound.play();
+                }
+                if (this.world.keyboard.left && this.x > 0) {
+                    this.moveLeft();
+                    this.otherDirection = true;
+                    //TODO this.walkingSound.play();
+                }
+                if (this.world.keyboard.space && !this.isCharacterInAir()) {
+                    this.jump();
+                }
+                // damit er nicht am linken Rand klebt muss ich hier den x-Wert aus der Klasse MO gebens
+                // damit er einen abstand zum Linken Rand hat 
+                // Das macht das sich nur die Kamera bewegt
+                this.world.cameraX = 120 + -this.x;
             }
-            if (this.world.keyboard.left && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-                //TODO this.walkingSound.play();
-            }
-            if (this.world.keyboard.space && !this.isCharacterInAir()) {
-                this.jump();
-            }
-            // damit er nicht am linken Rand klebt muss ich hier den x-Wert aus der Klasse MO gebens
-            // damit er einen abstand zum Linken Rand hat 
-            // Das macht das sich nur die Kamera bewegt
-            this.world.cameraX = 120 + -this.x;
         }, 1000 / 60);
 
         setInterval(() => { // muss in eine andere schleife weil die andere zu schnell ist, da wirft er eine ganze schlange von flaschen
-            if (this.world.keyboard.shot) {
+            if (this.world.keyboard.shot && !this.timeout || this.world.keyboard.shortShot && !this.timeout) {
+                if (this.world.keyboard.shot) {
+                    this.bottleShortOrLong = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection, false); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
+                    this.timeout = true;
+                    setTimeout(() => {
+                        this.timeout = false
+                    }, 500);
+                } else if (this.world.keyboard.shortShot) {
+                    this.bottleShortOrLong = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection, true); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
+                    this.timeout = true;
+                    setTimeout(() => {
+                        this.timeout = false
+                    }, 500);
+                }
                 if (this.world.bottleCounter > 0) {
-                    let bottle = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
-                    world.throwableObjects.push(bottle);
+                    world.throwableObjects.push(this.bottleShortOrLong);
                     this.world.bottleCounter -= 10;
                     this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
                     console.log(this.world.bottleCounter);
@@ -99,6 +117,7 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.imagesDead);
+                gameOver();
             } else if (this.isHurt()) {
                 this.playAnimation(this.imagesHit);
             } else if (this.isCharacterInAir()) {

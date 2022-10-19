@@ -1,4 +1,4 @@
-class World { //TODO extends CheckCollosion
+class World {
     character = new Character();
     level = level1;
     statBarHealth = new StatBarHealth();
