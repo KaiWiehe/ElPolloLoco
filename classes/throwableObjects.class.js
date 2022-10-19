@@ -18,7 +18,7 @@ class ThrowableObjects extends MovableObject {
         this.width = 80;
         this.height = 80;
         this.otherDirection2 = otherDirection;
-        if (short) {
+        if (short && !this.otherDirection2) { // Wenn ich nach links gucke wirft er immer nur kurz
             this.speedX -= 7;
         }
         this.animateBottle();

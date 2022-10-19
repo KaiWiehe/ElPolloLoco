@@ -80,8 +80,8 @@ class Character extends MovableObject {
                     this.otherDirection = true;
                     //TODO this.walkingSound.play();
                 }
-                if (this.world.keyboard.space && !this.isCharacterInAir()) {
-                    this.jump();
+                if (this.world.keyboard.space && (!this.isCharacterInAir(265))) {
+                    this.jump(25);
                 }
                 // damit er nicht am linken Rand klebt muss ich hier den x-Wert aus der Klasse MO gebens
                 // damit er einen abstand zum Linken Rand hat 
@@ -120,7 +120,7 @@ class Character extends MovableObject {
                 gameOver();
             } else if (this.isHurt()) {
                 this.playAnimation(this.imagesHit);
-            } else if (this.isCharacterInAir()) {
+            } else if (this.isCharacterInAir(265)) {
                 // Jump animation 
                 this.playAnimationJumping(this.imagesJumping);
             } else { // Character on the Ground

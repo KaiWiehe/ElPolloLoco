@@ -1,13 +1,13 @@
-class Chicken extends MovableObject {
+class SmallChicken extends MovableObject {
     x = 300 + Math.random() * 2000;
     y = 380;
     height = 50;
     width = 50;
 
     imagesWalking = [
-        'assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-        'assets/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
-        'assets/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png',
+        'assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+        'assets/img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+        'assets/img/3_enemies_chicken/chicken_small/1_walk/3_w.png',
     ];
 
     offset = {
@@ -22,17 +22,14 @@ class Chicken extends MovableObject {
     jumpInterval;
 
     dead = false;
-
-
-
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {
         super().loadImg(this.imagesWalking[0]);
         this.loadImgArray(this.imagesWalking);
         this.animateChicken();
-        this.speed = 0.15 + Math.random() * 0.25;
-        this.chickenJump(20);
+        this.speed = 0.65 + Math.random() * 0.25;
+        this.chickenJump(2);
         this.applyGravity();
     }
 }

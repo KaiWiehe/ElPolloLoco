@@ -50,28 +50,40 @@ class MovableObject extends drawableObjects {
     applyGravity() {
         setInterval(() => {
             // Entweder PEPE ist über dem Boden oder ich habe die Sprung Taste gedückt, dadurch hat sich der this.speedY Wert hat sich erhöht
-            if (this.isCharacterInAir() || this.speedY > 0) {
-                this.y -= this.speedY;
-                this.speedY -= this.acceleration;
-            }
-            if (!(this instanceof ThrowableObjects)) {
-                if (this.y >= 266) {
+            if ((this instanceof Character) || (this instanceof ThrowableObjects)) {
+                if (this.isCharacterInAir(265) || this.speedY > 0) {
+                    this.jumpOrFall();
+                }
+                if (!(this instanceof ThrowableObjects) && this.y >= 266) {
                     this.speedY = 0
                 } //Wenn er auf dem Boden ist setzt sich der wert wieder zurück
+            }
+            if ((this instanceof Chicken) || (this instanceof SmallChicken)) {
+                if (this.isCharacterInAir(380) || this.speedY > 0) {
+                    this.jumpOrFall();
+                }
+                if (this.y >= 380) {
+                    this.speedY = 0
+                }
             }
         }, 1000 / 25)
     }
 
-    isCharacterInAir() {
+    jumpOrFall() {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+    }
+
+    isCharacterInAir(number) {
         if (this instanceof ThrowableObjects) {
             return true;
         } else {
-            return this.y < 265;
+            return this.y < number;
         }
     }
 
-    jump() {
-        this.speedY = 25; //Sprunghöhe
+    jump(jumpHeight) {
+        this.speedY = jumpHeight; //Sprunghöhe
     }
 
     isColliding(obj) {
@@ -100,5 +112,45 @@ class MovableObject extends drawableObjects {
 
     isDead() {
         return this.energy == 0;
+    }
+
+    chickenJump(jumpProbability) {
+        let allowJump = false;
+        this.jumpInterval = setInterval(() => {
+            if (this.y === 380) { // damit das Huhn nicht zwei mal hintereinander springt
+                let i = this.randomNumber(1, jumpProbability);
+                if (i === 1) {
+                    allowJump = true;
+                }
+                if (allowJump) {
+                    this.jump(18);
+                }
+                allowJump = false;
+            }
+        }, 500);
+    }
+
+    animateChicken() {
+        let moveLeft = true;
+        this.moveLeftInterval = setInterval(() => {
+            if (play && moveLeft) {
+                this.moveLeft();
+            }
+        }, 1000 / 60)
+        this.playAnimationInterval = setInterval(() => {
+            if (moveLeft) {
+                this.playAnimation(this.imagesWalking);
+            } else {
+                this.loadImg(this.imagesWalking[1]); // zeigt stehendes bild an
+            }
+        }, 300)
+        setInterval(() => {
+            let i = this.randomNumber(1, 5);
+            if (i === 1) {
+                moveLeft = false;
+            } else {
+                moveLeft = true;
+            }
+        }, 1000);
     }
 }
