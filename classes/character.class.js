@@ -52,6 +52,7 @@ class Character extends MovableObject {
     bottleShortOrLong;
 
     timeout = false;
+    gameover = false;
 
     /* #############################################   Funktionen   ############################################# */
 
@@ -117,7 +118,10 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.imagesDead);
-                gameOver();
+                if (!this.gameover) {
+                    gameOver();
+                    this.gameover = true;
+                }
             } else if (this.isHurt()) {
                 this.playAnimation(this.imagesHit);
             } else if (this.isCharacterInAir(265)) {

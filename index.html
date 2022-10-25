@@ -44,6 +44,21 @@
 </head>
 
 <body onload="init()">
+    <div id="hud" class="hud d-none">
+        <div class="pannel">
+            <div class="pannelWrapper">
+                <img id="mobileLeft" src="assets/img/bg/arrow-left.svg">
+                <img id="mobileRight" src="assets/img/bg/arrow-right.svg">
+            </div>
+            <div class="pannelWrapper">
+                <img id="mobileSpace" src="assets/img/bg/arrow-up.svg">
+                <img id="mobileShot" src="assets/img/bg/shot.svg">
+            </div>
+        </div>
+    </div>
+    <button onclick="buttonAktive()" id="ud_menu_icon" class="ud_menu_icon ud_menu_icon-X">
+        <span></span>
+    </button>
     <div class="info" id="info">
         <div class="box">
             <div class="box1">
@@ -67,9 +82,6 @@
                     <li class="a" onclick="openBestPlayer()">Bestenliste</li>
                     <li class="a" id="start">Spiel Starten</li>
                 </ul>
-
-
-
             </div>
         </div>
     </div>
@@ -82,6 +94,14 @@
         <div id="gameOver" class="gameOver d-none">
             <img src="assets/img/9_intro_outro_screens/game_over/game over.png" alt="GameOver">
             <button class="btn" onclick="reload()">Neues Spiel?</button>
+        </div>
+        <div id="winGame" class="winGame d-none">
+            <div class="win">Gewonnen</div>
+            <div>
+                <span>So lange hast du gebraucht: </span>
+                <div id="timer">00:00</div>
+            </div>
+            <div class="winButton"><button class="btn" onclick="reload()">Neues Spiel?</button></div>
         </div>
         <div id="music" class="music d-none">Musik von: ???</div>
         <div id="settings" class="settings d-none">Einstellungen</div>

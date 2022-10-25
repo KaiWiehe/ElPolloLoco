@@ -46,3 +46,53 @@
         background-position-x: -7px;
     }
 }
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+    .info {
+        display: none;
+    }
+    .contentContainer {
+        width: 100%;
+    }
+    .settings,
+    .music,
+    .bestPlayer,
+    .winGame {
+        max-height: 100vh;
+        height: 100vh;
+    }
+    .ud_menu_icon {
+        display: block;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+    .contentContainer {
+        height: 100vh;
+    }
+    .startScreen img:first-of-type {
+        height: 100vh;
+    }
+    .settings,
+    .music,
+    .bestPlayer,
+    .winGame {
+        max-height: 100vh;
+        height: 100vh;
+    }
+}
+
+@media only screen and (max-height: 550px) {
+    .info {
+        display: none;
+    }
+    .ud_menu_icon {
+        display: block;
+    }
+}

@@ -4,6 +4,8 @@ class CheckCollosion {
     endboss;
     chicken;
 
+    openWinGame = false;
+
     constructor(world) {
         this.world = world;
         this.checkCollosion();
@@ -112,7 +114,11 @@ class CheckCollosion {
                     clearInterval(this.endboss.playAnimationInterval); //stoppt die Intervalle
                     this.endboss.dead = true; // damit der keinen schaden mehr macht
                     setTimeout(() => {
-                        gameOver();
+                        if (!this.openWinGame) {
+                            openWinGame()
+                            this.openWinGame = true;
+                        }
+                        clearInterval(timerInterval);
                     }, 1500);
                 }
             }
