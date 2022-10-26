@@ -133,24 +133,28 @@ class MovableObject extends drawableObjects {
     animateChicken() {
         let moveLeft = true;
         this.moveLeftInterval = setInterval(() => {
-            if (play && moveLeft) {
-                this.moveLeft();
-            }
+            this.moveLeftOrRight(moveLeft);
         }, 1000 / 60)
         this.playAnimationInterval = setInterval(() => {
-            if (moveLeft) {
-                this.playAnimation(this.imagesWalking);
-            } else {
-                this.loadImg(this.imagesWalking[1]); // zeigt stehendes bild an
-            }
+            this.playAnimation(this.imagesWalking);
         }, 300)
         setInterval(() => {
-            let i = this.randomNumber(1, 5);
+            let i = this.randomNumber(1, 3);
             if (i === 1) {
-                moveLeft = false;
+                moveLeft = false; //läuft nach rechts
             } else {
-                moveLeft = true;
+                moveLeft = true; //läuft nach links
             }
-        }, 1000);
+        }, 5000);
+    }
+
+    moveLeftOrRight(moveLeft) {
+        if (play && moveLeft) {
+            this.otherDirection = false;
+            this.moveLeft();
+        } else if (play) {
+            this.otherDirection = true;
+            this.moveRight();
+        }
     }
 }

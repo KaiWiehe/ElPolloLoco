@@ -63,9 +63,20 @@
     .winGame {
         max-height: 100vh;
         height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
     }
     .ud_menu_icon {
         display: block;
+    }
+    .hud {
+        bottom: 2rem;
+    }
+    .hud img {
+        width: 4rem;
+        opacity: 0.3;
+    }
+    .gameOver img {
+        height: 100vh;
     }
 }
 
@@ -75,15 +86,28 @@
     }
     .contentContainer {
         height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
     }
     .startScreen img:first-of-type {
         height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
     }
     .settings,
     .music,
     .bestPlayer,
     .winGame {
         max-height: 100vh;
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+    }
+    .hud {
+        bottom: 0;
+    }
+    .hud img {
+        width: 6rem;
+        opacity: 0.3;
+    }
+    .gameOver img {
         height: 100vh;
     }
 }

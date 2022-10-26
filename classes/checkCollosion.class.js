@@ -20,6 +20,7 @@ class CheckCollosion {
             this.collisionCharacterEndboss(); // Character => Endboss
             this.collisionCharacterCoin(); // Character => Coin
             this.collisionCharacterBottle(); // Character => Bottle
+            this.collisionCharacterBarbedWire(); // Character => BarbedWire
 
             this.shotChicken(); // Bottle => Chicken
             this.shotEndboss(); // Bottle => Endboss
@@ -83,6 +84,12 @@ class CheckCollosion {
                 this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
             }
         });
+    }
+
+    collisionCharacterBarbedWire() {
+        if (this.world.character.isColliding(this.world.level.clouds[1])) {
+            this.CharacterLoseEnergy();
+        };
     }
 
     /** check if you shot a chicken, show the dead chicken IMG */

@@ -1,5 +1,5 @@
 class SmallChicken extends MovableObject {
-    x = 300 + Math.random() * 2000;
+    x = 500 + Math.random() * 2000;
     y = 380;
     height = 50;
     width = 50;
@@ -20,6 +20,8 @@ class SmallChicken extends MovableObject {
     moveLeftInterval;
     playAnimationInterval;
     jumpInterval;
+    WalkRightInterval;
+    WalkRightInterval2;
 
     dead = false;
     /* #############################################   Funktionen   ############################################# */

@@ -1,5 +1,5 @@
 class drawableObjects {
-    x = 120;
+    x = 300;
     y = 270;
     img;
     height = 150;
@@ -43,7 +43,7 @@ class drawableObjects {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Coin || this instanceof Bottle || this instanceof ThrowableObjects) { // zeigt den Ramen nur beim Character und beim Chicken an
+        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Coin || this instanceof Bottle || this instanceof ThrowableObjects || this instanceof SmallChicken || this instanceof BarbedWire) { // zeigt den Ramen nur beim Character und beim Chicken an
             ctx.beginPath();
             ctx.lineWidth = "1";
             ctx.strokeStyle = "blue";

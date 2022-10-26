@@ -20,6 +20,7 @@ const level1 = new Level(
         new SmallChicken(),
     ], [
         new Cloud(),
+        new BarbedWire(),
     ], [
         new Background('assets/img/5_background/layers/air.png', -719, 0),
         new Background('assets/img/5_background/layers/3_third_layer/2.png', -719, 0),

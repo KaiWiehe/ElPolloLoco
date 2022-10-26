@@ -37,7 +37,6 @@ class Character extends MovableObject {
     // ##########################################################################################################
 
     speed = 3;
-    //world;
 
     walkingSound = new Audio('assets/audio/walking.mp3');
     walkingSoundSlow = this.walkingSound.playbackRate = 0.5; // Abspielgeschwindigkeit
