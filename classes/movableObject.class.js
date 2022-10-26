@@ -1,7 +1,6 @@
 class MovableObject extends drawableObjects {
     speed = 0.15;
     energy = 100;
-    damage = 0.5;
 
     otherDirection = false;
 
@@ -94,8 +93,8 @@ class MovableObject extends drawableObjects {
     }
 
     // Der Damage wird der Energy abgezogen
-    hit() {
-        this.energy -= this.damage;
+    hit(damage) {
+        this.energy -= damage;
         if (this.energy < 0) {
             this.energy = 0;
         } else {

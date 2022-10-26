@@ -1,10 +1,10 @@
 class Endboss extends MovableObject {
-    x = 2400;
+    x = 2400; // 2400
     y = 150;
     height = 300;
     width = 300;
 
-    imagesWalking = [
+    imagesAlert = [
         'assets/img/4_enemie_boss_chicken/2_alert/G5.png',
         'assets/img/4_enemie_boss_chicken/2_alert/G6.png',
         'assets/img/4_enemie_boss_chicken/2_alert/G7.png',
@@ -15,31 +15,99 @@ class Endboss extends MovableObject {
         'assets/img/4_enemie_boss_chicken/2_alert/G12.png',
     ];
 
+    imagesWalking = [
+        'assets/img/4_enemie_boss_chicken/1_walk/G1.png',
+        'assets/img/4_enemie_boss_chicken/1_walk/G2.png',
+        'assets/img/4_enemie_boss_chicken/1_walk/G3.png',
+        'assets/img/4_enemie_boss_chicken/1_walk/G4.png',
+    ];
+
+    imagesAttack = [
+        'assets/img/4_enemie_boss_chicken/3_attack/G13.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G14.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G15.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G16.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G17.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G18.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G19.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G20.png',
+    ];
+
+    imagesHurt = [
+        'assets/img/4_enemie_boss_chicken/4_hurt/G21.png',
+        'assets/img/4_enemie_boss_chicken/4_hurt/G22.png',
+        'assets/img/4_enemie_boss_chicken/4_hurt/G23.png',
+    ];
+
     imagesDead = [
         'assets/img/4_enemie_boss_chicken/5_dead/G24.png',
         'assets/img/4_enemie_boss_chicken/5_dead/G25.png',
         'assets/img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
 
-    playAnimationInterval;
+    animationInterval
+    //playAlertInterval;
+    //playWalkingInterval;
+    //playAttackInterval;
+
     dead = false;
 
     energy = 100;
+
+    world;
+
+    attackIntervalActive = false;
+    walkingIntervalActive = false;
+    alertIntervalActive = false;
+
+    speed = 1.5;
 
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {
         super().loadImg(this.imagesWalking[0]);
+        this.loadImgArray(this.imagesAlert);
         this.loadImgArray(this.imagesWalking);
+        this.loadImgArray(this.imagesAttack);
+        this.loadImgArray(this.imagesHurt);
         this.loadImgArray(this.imagesDead);
-        this.animate();
-        this.speed = 0.15 + Math.random() * 0.25;
+        this.alert();
+        this.stopAlert();
+        this.animations();
     }
 
-    animate() {
-        //this.moveLeft();
-        this.playAnimationInterval = setInterval(() => {
-            this.playAnimation(this.imagesWalking);
+    stopAllIntervals() {
+        this.attackIntervalActive = false;
+        this.walkingIntervalActive = false;
+        this.alertIntervalActive = false;
+    }
+
+    animations() {
+        this.animationInterval = setInterval(() => {
+            if (this.attackIntervalActive) {
+                this.playAnimation(this.imagesAttack);
+            }
+            if (this.walkingIntervalActive) {
+                this.playAnimation(this.imagesWalking);
+            }
         }, 300)
+    }
+
+    alert() {
+        this.playAlertInterval = setInterval(() => {
+            this.playAnimation(this.imagesAlert);
+        }, 300)
+        this.alertIntervalActive = true;
+    }
+
+    stopAlert() {
+        setTimeout(() => { // sonst kommt manchmal ein error, weil der character noch nicht fertig geladen ist
+            setInterval(() => {
+                if (this.world.character.x >= 2000) {
+                    clearInterval(this.playAlertInterval);
+                    this.alertIntervalActive = false; // damit er losläuft
+                }
+            }, 100);
+        }, 2000);
     }
 }

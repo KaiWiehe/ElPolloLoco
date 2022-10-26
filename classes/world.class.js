@@ -33,7 +33,7 @@ class World {
     // Damit im Character die Variable World genau das hier ist
     setWorld() {
         this.character.world = this;
-        //this.checkCollosion.world = this;
+        this.level.endboss[0].world = this;
     }
 
     draw() {
@@ -130,7 +130,7 @@ class World {
             this.flipImg(object);
         }
         object.draw(this.ctx);
-        //object.drawFrame(this.ctx);
+        object.drawFrame(this.ctx);
         if (this.isWalkingLeft(object)) {
             this.flipImgBack(object);
         }

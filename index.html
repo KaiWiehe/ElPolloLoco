@@ -74,19 +74,16 @@
                 </ul>
                 <ul>
                     <li class="li-throw-short">Kurz Werfen</li>
+                    <li class="a" onclick="openBestPlayer()">Bestenliste</li>
                 </ul>
                 <ul>
                     <li class="a" onclick="openMusic()">Musik</li>
                     <li class="a" onclick="openSettings()">Einstellung</li>
                 </ul>
-                <ul>
-                    <li class="a" onclick="openBestPlayer()">Bestenliste</li>
-                    <li class="a" id="start">Spiel Starten</li>
-                </ul>
             </div>
         </div>
     </div>
-    <div class="contentContainer">
+    <div id="contentContainer" class="contentContainer">
         <canvas id="canvas" class="canvas d-none" width="720" height="480"></canvas>
         <div id="startScreen" class="startScreen">
             <img src="assets/img/9_intro_outro_screens/start/startscreen_1.png" alt="StartScreen">
@@ -101,12 +98,17 @@
             <div>
                 <span>So lange hast du gebraucht: </span>
                 <div id="timer">00:00</div>
+                <span>So viele Münzen hast du gefunden: </span>
+                <div id="coins"></div>
             </div>
             <div class="winButton"><button class="btn" onclick="reload()">Neues Spiel?</button></div>
         </div>
-        <div id="music" class="music d-none">Musik von: ???</div>
-        <div id="settings" class="settings d-none">Einstellungen</div>
-        <div id="bestPlayer" class="bestPlayer d-none">Hier könnte dein Name stehen, tut er aber nicht!</div>
+        <div id="music" class="music d-none">Musik von: ??? <button class="btn" onclick="reload()">Neues Spiel?</button></div>
+        <div id="settings" class="settings d-none"><span>Fullscreen:</span><img src="assets/img/bg/enter_fullscreen.png" onclick="fullscreen()"><button class="btn" onclick="reload()">Neues Spiel?</button></div>
+        <div id="bestPlayer" class="bestPlayer d-none">
+            Hier könnte dein Name stehen, tut er aber nicht!
+            <span>Platz 1: Kai Wiehe</span>
+            <button class="btn" onclick="reload()">Neues Spiel?</button></div>
     </div>
 </body>
 

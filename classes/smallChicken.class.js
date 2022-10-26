@@ -24,6 +24,8 @@ class SmallChicken extends MovableObject {
     WalkRightInterval2;
 
     dead = false;
+
+    alive = true;
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {

@@ -74,6 +74,6 @@ const level1 = new Level(
         new Bottle(),
         new Bottle(),
     ], [
-        new Endboss()
+        new Endboss(this)
     ]
 );

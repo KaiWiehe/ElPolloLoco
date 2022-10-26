@@ -25,7 +25,7 @@ class Chicken extends MovableObject {
 
     dead = false;
 
-
+    alive = true;
 
     /* #############################################   Funktionen   ############################################# */
 

@@ -56,9 +56,17 @@ class CheckCollosion {
     /** if you hit the endboss with your body, you will lose energy */
     collisionCharacterEndboss() {
         this.world.level.endboss.forEach((endboss) => {
-            if (this.world.character.isColliding(endboss)) {
-                if (!endboss.dead) { // wenn das chicken noch lebt
+            if (this.world.character.isColliding(endboss)) { // spiele die attack animation
+                if (!endboss.dead) { // wenn der endboss noch lebt
                     this.CharacterLoseEnergy();
+                    endboss.attackIntervalActive = true; // spiele die attack animation
+                    endboss.walkingIntervalActive = false; // spiele die attack animation
+                }
+            } else { // spiele die walking animation
+                if (!endboss.alertIntervalActive && !endboss.dead) {
+                    endboss.attackIntervalActive = false;
+                    endboss.walkingIntervalActive = true;
+                    endboss.moveLeft();
                 }
             }
         });
@@ -96,7 +104,8 @@ class CheckCollosion {
     shotChicken() {
         this.world.throwableObjects.forEach((bottle) => {
             for (let i = 0; i < this.chicken.length; i++) {
-                if (this.chicken[i].isColliding(bottle)) {
+                if (this.chicken[i].isColliding(bottle) && !bottle.broken && this.chicken[i].alive) {
+                    this.chicken[i].alive = false;
                     if (this.chicken[i] instanceof SmallChicken) {
                         this.chicken[i].loadImg('assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
                     } else {
@@ -107,6 +116,17 @@ class CheckCollosion {
                     clearInterval(this.chicken[i].playAnimationInterval); //stoppt die Intervalle
                     clearInterval(this.chicken[i].jumpInterval); //stoppt die Intervalle
                     this.chicken[i].dead = true; // damit der keinen schaden mehr macht
+                    //-----------------------
+                    setTimeout(() => {
+                        bottle.flying = false;
+                        bottle.splash = true;
+                        bottle.speedY = 0;
+                        bottle.speedX = 0;
+                    }, 100);
+                    setTimeout(() => {
+                        this.invisible(bottle);
+                        bottle.broken = true;
+                    }, 500);
                 }
             }
         })
@@ -115,8 +135,9 @@ class CheckCollosion {
     /** check if you shot the endboss and reduce the energy */
     shotEndboss() {
         this.world.throwableObjects.forEach((bottle) => {
-            if (this.endboss.isColliding(bottle)) {
-                this.endboss.hit();
+            if (this.endboss.isColliding(bottle) && !bottle.broken) {
+                this.endboss.hit(0.35);
+                console.log(this.endboss.energy);
                 if (this.endboss.energy <= 0) {
                     clearInterval(this.endboss.playAnimationInterval); //stoppt die Intervalle
                     this.endboss.dead = true; // damit der keinen schaden mehr macht
@@ -128,6 +149,17 @@ class CheckCollosion {
                         clearInterval(timerInterval);
                     }, 1500);
                 }
+                //-----------------------
+                setTimeout(() => {
+                    bottle.flying = false;
+                    bottle.splash = true;
+                    bottle.speedY = 0;
+                    bottle.speedX = 0;
+                }, 100);
+                setTimeout(() => {
+                    this.invisible(bottle);
+                    bottle.broken = true;
+                }, 500);
             }
         })
     }
@@ -136,7 +168,8 @@ class CheckCollosion {
     checkEndbossDead() {
         setInterval(() => {
             if (this.endboss.dead && this.endboss.currentImgEndboss <= 2) { // er soll nach dem dritten Bild wieder aufhören
-                this.endboss.playAnimationEndboss(this.world.level.endboss[0].imagesDead);
+                this.endboss.stopAllIntervals();
+                this.endboss.playAnimationEndboss(this.endboss.imagesDead);
             }
         }, 200);
         setInterval(() => {
@@ -153,7 +186,7 @@ class CheckCollosion {
     }
 
     CharacterLoseEnergy() {
-        this.world.character.hit();
+        this.world.character.hit(0.5);
         this.world.statBarHealth.setHealthPersentage(this.world.character.energy); // Zieht der StatBar leben ab, Zeigt also das richtige bild je nach Lebensprozent
     }
 

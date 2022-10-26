@@ -7,7 +7,6 @@ let timerInterval;
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    setOnClick();
     mobileControlling();
 }
 
@@ -105,16 +104,6 @@ function reload() {
     window.location.reload();
 }
 
-function setOnClick() {
-    document.getElementById('start').addEventListener('click', () => {
-        if (!play) {
-            startGame();
-        } else {
-            openCanvas();
-        }
-    });
-}
-
 function closeAll() {
     let startScreen = document.getElementById('startScreen');
     let gameOver = document.getElementById('gameOver');
@@ -146,32 +135,38 @@ function startGame() {
 function gameOver() {
     let gameOver = document.getElementById('gameOver');
     closeAll();
+    play = false;
     gameOver.classList.remove('d-none');
 }
 
 function openMusic() {
     closeAll();
+    play = false;
     music.classList.remove('d-none');
 }
 
 function openSettings() {
     closeAll();
+    play = false;
     settings.classList.remove('d-none');
 }
 
 function openBestPlayer() {
     closeAll();
+    play = false;
     bestPlayer.classList.remove('d-none');
 }
 
 function openWinGame() {
+    play = false;
     closeAll();
     winGame.classList.remove('d-none');
-    winGame.classList.remove('d-none');
+    document.getElementById('coins').innerHTML = world.coinCounter / 10 + ' / 10';
 }
 
 function openCanvas() {
     closeAll();
+    debugger
     canvas.classList.remove('d-none');
 }
 
@@ -258,4 +253,30 @@ window.addEventListener('resize', () => {
 
 function mobile() {
     return window.innerWidth < 1000;
+}
+
+function fullscreen() {
+    closeAll();
+    canvas.style = "border: 0;border-radius: unset";
+    startScreen.classList.remove('d-none');
+    let contentContainer = document.getElementById('contentContainer');
+    enterFullscreen(contentContainer);
+}
+
+function enterFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.msRequestFullscreen) { // for IE11 (remove June 15, 2022)
+        element.msRequestFullscreen();
+    } else if (element.webkitRequestFullscreen) { // iOS Safari
+        element.webkitRequestFullscreen();
+    }
+}
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
 }
