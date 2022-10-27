@@ -137,6 +137,7 @@ function gameOver() {
     closeAll();
     play = false;
     gameOver.classList.remove('d-none');
+    world.level.endboss[0].energy = 100; // sonst kann es dazu kommen das erst der gameover screen gezeigt wird und dann der win screen. weil der endboss kurz danach stirbt
 }
 
 function openMusic() {
@@ -162,6 +163,8 @@ function openWinGame() {
     closeAll();
     winGame.classList.remove('d-none');
     document.getElementById('coins').innerHTML = world.coinCounter / 10 + ' / 10';
+    world.character.energy = 100000; //sonst kann es dazu kommen das wenn der endboss stirbt und kurz danach pepe das doch gameover da stand
+    console.log(world.character.energy);
 }
 
 function openCanvas() {

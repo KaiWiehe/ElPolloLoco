@@ -34,12 +34,38 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/4_hurt/H-43.png'
     ];
 
+    imagesIdle = [
+        'assets/img/2_character_pepe/1_idle/idle/I-1.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-2.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-3.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-4.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-5.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-6.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-7.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-8.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-9.png',
+        'assets/img/2_character_pepe/1_idle/idle/I-10.png',
+    ];
+
+    imagesLongIdle = [
+        'assets/img/2_character_pepe/1_idle/long_idle/I-11.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-12.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-13.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-14.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-15.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-16.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-17.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-18.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-19.png',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-20.png',
+    ]
+
     // ##########################################################################################################
 
     speed = 3;
 
     walkingSound = new Audio('assets/audio/walking.mp3');
-    walkingSoundSlow = this.walkingSound.playbackRate = 0.5; // Abspielgeschwindigkeit
+    //walkingSoundSlow = this.walkingSound.playbackRate = 0.5; // Abspielgeschwindigkeit
 
     offset = {
         top: 60,
@@ -52,6 +78,9 @@ class Character extends MovableObject {
 
     timeout = false;
     gameover = false;
+    playWalkingSound = false;
+
+    idleCounter = 0;
 
     /* #############################################   Funktionen   ############################################# */
 
@@ -61,6 +90,8 @@ class Character extends MovableObject {
         this.loadImgArray(this.imagesJumping);
         this.loadImgArray(this.imagesDead);
         this.loadImgArray(this.imagesHit);
+        this.loadImgArray(this.imagesIdle);
+        this.loadImgArray(this.imagesLongIdle);
         this.animate();
         this.applyGravity()
     }
@@ -73,12 +104,14 @@ class Character extends MovableObject {
                 if (this.world.keyboard.right && this.x < this.world.level.levelEnd) {
                     this.moveRight();
                     this.otherDirection = false;
-                    //TODO this.walkingSound.play();
+                    if (!this.isCharacterInAir(265)) {
+                        this.walkingSound.play();
+                        this.playWalkingSound = true;
+                    }
                 }
                 if (this.world.keyboard.left && this.x > 0) {
                     this.moveLeft();
                     this.otherDirection = true;
-                    //TODO this.walkingSound.play();
                 }
                 if (this.world.keyboard.space && (!this.isCharacterInAir(265))) {
                     this.jump(25);
@@ -115,6 +148,7 @@ class Character extends MovableObject {
         }, 100);
         // Animationen
         setInterval(() => {
+
             if (this.isDead()) {
                 this.playAnimation(this.imagesDead);
                 if (!this.gameover) {
@@ -123,19 +157,27 @@ class Character extends MovableObject {
                 }
             } else if (this.isHurt()) {
                 this.playAnimation(this.imagesHit);
+                this.idleCounter = 0;
             } else if (this.isCharacterInAir(265)) {
                 // Jump animation 
                 this.playAnimationJumping(this.imagesJumping);
+                this.idleCounter = 0;
             } else { // Character on the Ground
                 this.currentImgJumping = 0; // Wenn er auf dem Boden steht wird der wert auf 0 gesetzt damit er beim nächsten sprung wieder beim ersten Bild anfängt
                 if (this.world.keyboard.right || this.world.keyboard.left) {
                     // Walk animation
                     this.playAnimation(this.imagesWalking);
+                    this.idleCounter = 0;
                 } else { // Wenn er stehen bleibt
-                    this.currentImg = 0; // wenn er stehen bleibt setzt sich der wert wieder auf 0 damit er beim erneuten loslaufen wieder beim ersten Bild anfängt
-                    this.loadImg('assets/img/2_character_pepe/1_idle/idle/I-1.png'); // wenn er stehen bleibt zeigt er das Bild an
+                    if (this.idleCounter < 10) {
+                        this.playAnimation(this.imagesIdle);
+                        this.idleCounter += 0.5;
+                    } else {
+                        this.playAnimation(this.imagesLongIdle);
+                    }
                 }
             }
         }, 105);
     }
+
 }

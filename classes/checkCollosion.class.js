@@ -24,7 +24,7 @@ class CheckCollosion {
 
             this.shotChicken(); // Bottle => Chicken
             this.shotEndboss(); // Bottle => Endboss
-        }, 10);
+        }, 1000 / 60); //10
     }
 
     /** if you hit the chicken with your body, you will lose energy.
@@ -64,9 +64,10 @@ class CheckCollosion {
                 }
             } else { // spiele die walking animation
                 if (!endboss.alertIntervalActive && !endboss.dead) {
-                    endboss.attackIntervalActive = false;
-                    endboss.walkingIntervalActive = true;
-                    endboss.moveLeft();
+                    endboss.attackIntervalActive = false; // stoppt die attack animation
+                    endboss.walkingIntervalActive = true; // startet die walking animation
+                    endboss.moveLeft(); // läuft nach links
+                    this.world.level.levelEnd = endboss.x; // damit kann pepe nicht hinter den endboss laufen
                 }
             }
         });
@@ -136,8 +137,9 @@ class CheckCollosion {
     shotEndboss() {
         this.world.throwableObjects.forEach((bottle) => {
             if (this.endboss.isColliding(bottle) && !bottle.broken) {
-                this.endboss.hit(0.35);
+                this.endboss.hit(0.60);
                 console.log(this.endboss.energy);
+                this.world.statBarEndboss.setEndbossPersentage(this.endboss.energy)
                 if (this.endboss.energy <= 0) {
                     clearInterval(this.endboss.playAnimationInterval); //stoppt die Intervalle
                     this.endboss.dead = true; // damit der keinen schaden mehr macht

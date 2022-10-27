@@ -130,7 +130,7 @@ class World {
             this.flipImg(object);
         }
         object.draw(this.ctx);
-        object.drawFrame(this.ctx);
+        //object.drawFrame(this.ctx);
         if (this.isWalkingLeft(object)) {
             this.flipImgBack(object);
         }

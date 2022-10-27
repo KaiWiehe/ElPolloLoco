@@ -45,10 +45,14 @@ class Endboss extends MovableObject {
         'assets/img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
 
+    offset = {
+        top: 60,
+        bottom: 30,
+        left: 40,
+        right: 40
+    }
+
     animationInterval
-    //playAlertInterval;
-    //playWalkingInterval;
-    //playAttackInterval;
 
     dead = false;
 
@@ -60,7 +64,7 @@ class Endboss extends MovableObject {
     walkingIntervalActive = false;
     alertIntervalActive = false;
 
-    speed = 1.5;
+    speed = 0; //1.5
 
     /* #############################################   Funktionen   ############################################# */
 
