@@ -72,7 +72,7 @@ class drawableObjects {
 
     loadCoinOrBottle(path, width, height, coinOrBottle) {
         this.loadImg(path);
-        this.x = 300 + Math.random() * 2000;
+        this.x = 400 + Math.random() * 1800; // von x300 bis xZufällig werden die sachen platziert 
         if (coinOrBottle === 'coin') {
             this.y = 80 + Math.random() * 250;
         } else {

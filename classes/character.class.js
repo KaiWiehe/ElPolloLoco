@@ -64,8 +64,17 @@ class Character extends MovableObject {
 
     speed = 3;
 
-    walkingSound = new Audio('assets/audio/walking.mp3');
-    //walkingSoundSlow = this.walkingSound.playbackRate = 0.5; // Abspielgeschwindigkeit
+    walkingSound = new Audio('assets/audio/running.wav');
+    hitSound = new Audio('assets/audio/hit.wav');
+    jumpingSound = new Audio('assets/audio/jump.wav');
+    dieSound = new Audio('assets/audio/die.m4a');
+    snoreSound = new Audio('assets/audio/snore.mp3');
+
+    playWalkingSound = false;
+    playhitSound = false;
+    playjumpingSound = false;
+    playdieSound = false;
+    playsnoreSound = false;
 
     offset = {
         top: 60,
@@ -78,14 +87,13 @@ class Character extends MovableObject {
 
     timeout = false;
     gameover = false;
-    playWalkingSound = false;
 
     idleCounter = 0;
 
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {
-        super().loadImg(this.imagesWalking[0]); // TODO Kann ich aus irgendeinem Grund nicht wegnehmen
+        super().loadImg(this.imagesWalking[0]);
         this.loadImgArray(this.imagesWalking);
         this.loadImgArray(this.imagesJumping);
         this.loadImgArray(this.imagesDead);
@@ -97,87 +105,193 @@ class Character extends MovableObject {
     }
 
     animate() {
-        //Bewegung und Sound
+        this.CharacterMovementAndSounds()
+        this.shotInterval();
+        this.animationAndSoundsInterval();
+    }
+
+    CharacterMovementAndSounds() {
         setInterval(() => {
             if (play) {
-                this.walkingSound.pause();
-                if (this.world.keyboard.right && this.x < this.world.level.levelEnd) {
-                    this.moveRight();
-                    this.otherDirection = false;
-                    if (!this.isCharacterInAir(265)) {
-                        this.walkingSound.play();
-                        this.playWalkingSound = true;
-                    }
-                }
-                if (this.world.keyboard.left && this.x > 0) {
-                    this.moveLeft();
-                    this.otherDirection = true;
-                }
-                if (this.world.keyboard.space && (!this.isCharacterInAir(265))) {
-                    this.jump(25);
-                }
-                // damit er nicht am linken Rand klebt muss ich hier den x-Wert aus der Klasse MO gebens
-                // damit er einen abstand zum Linken Rand hat 
-                // Das macht das sich nur die Kamera bewegt
-                this.world.cameraX = 120 + -this.x;
+                this.CharMovementAndSounds();
+                this.setCamera();
             }
         }, 1000 / 60);
+    }
 
+    allowToMoveRight() {
+        return this.world.keyboard.right && this.x < this.world.level.levelEnd;
+    }
+
+    allowToMoveLeft() {
+        return this.world.keyboard.left && this.x > 0;
+    }
+
+    allowToJump() {
+        return this.world.keyboard.space && (!this.isCharacterInAir(265));
+    }
+
+    playWalkingSounds() {
+        if (!this.playWalkingSound) {
+            this.walkingSound.currentTime = 0.3;
+            this.walkingSound.volume = 0.3;
+            this.walkingSound.play();
+            this.playWalkingSound = true;
+        }
+    }
+
+    playJumpSound() {
+        this.walkingSound.volume = 0;
+        if (!this.playjumpingSound) {
+            this.jumpingSound.currentTime = 0;
+            this.jumpingSound.volume = 0.3;
+            this.jumpingSound.play();
+            this.playjumpingSound = true;
+        }
+        this.playsnoreSound = false;
+        this.snoreSound.pause();
+    }
+
+    CharMovementAndSounds() {
+        if (this.allowToMoveRight()) {
+            this.moveRight();
+            this.otherDirection = false;
+            this.playWalkingSounds();
+        }
+        if (this.allowToMoveLeft()) {
+            this.moveLeft();
+            this.otherDirection = true;
+            this.playWalkingSounds();
+        }
+        if (this.allowToJump()) {
+            this.jump(25);
+            this.playJumpSound();
+            this.idleCounter = 0;
+        }
+        if (!this.isCharacterInAir(265)) {
+            this.playjumpingSound = false;
+        }
+    }
+
+    setCamera() {
+        // damit er nicht am linken Rand klebt muss ich hier den x-Wert aus der Klasse MO gebens
+        // damit er einen abstand zum Linken Rand hat 
+        // Das macht das sich nur die Kamera bewegt
+        this.world.cameraX = 120 + -this.x;
+    }
+
+    shotInterval() {
         setInterval(() => { // muss in eine andere schleife weil die andere zu schnell ist, da wirft er eine ganze schlange von flaschen
-            if (this.world.keyboard.shot && !this.timeout || this.world.keyboard.shortShot && !this.timeout) {
-                if (this.world.keyboard.shot) {
-                    this.bottleShortOrLong = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection, false); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
-                    this.timeout = true;
-                    setTimeout(() => {
-                        this.timeout = false
-                    }, 500);
-                } else if (this.world.keyboard.shortShot) {
-                    this.bottleShortOrLong = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection, true); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
-                    this.timeout = true;
-                    setTimeout(() => {
-                        this.timeout = false
-                    }, 500);
-                }
-                if (this.world.bottleCounter > 0) {
-                    world.throwableObjects.push(this.bottleShortOrLong);
-                    this.world.bottleCounter -= 10;
-                    this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
-                    console.log(this.world.bottleCounter);
-                }
+            if (this.allowToShot()) {
+                this.allowToLongShot() && this.shot(false);
+                this.allowToShortShot() && this.shot(true);
+                this.idleCounter = 0;
+                this.playsnoreSound = false;
+                this.snoreSound.pause();
             }
         }, 100);
-        // Animationen
-        setInterval(() => {
+    }
 
+    allowToShot() {
+        return this.world.keyboard.shot && !this.timeout || this.world.keyboard.shortShot && !this.timeout;
+    }
+
+    allowToLongShot() {
+        return this.world.keyboard.shot && this.world.bottleCounter > 0;
+    }
+
+    shot(longOrShort) {
+        this.bottleCounterIsNotEmty() && this.updateBottleCounterAndShot(longOrShort);
+        this.timeout = true;
+        setTimeout(() => {
+            this.timeout = false
+        }, 500);
+    }
+
+    allowToShortShot() {
+        return this.world.keyboard.shortShot && this.world.bottleCounter > 0;
+    }
+
+    bottleCounterIsNotEmty() {
+        return this.world.bottleCounter > 0;
+    }
+
+    updateBottleCounterAndShot(longOrShort) {
+        this.bottleShortOrLong = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection, longOrShort); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
+        this.world.throwableObjects.push(this.bottleShortOrLong);
+        this.world.bottleCounter -= 10;
+        this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
+    }
+
+    animationAndSoundsInterval() {
+        setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.imagesDead);
-                if (!this.gameover) {
-                    gameOver();
-                    this.gameover = true;
-                }
+                this.deadActions();
             } else if (this.isHurt()) {
-                this.playAnimation(this.imagesHit);
-                this.idleCounter = 0;
+                this.isHurtActions();
             } else if (this.isCharacterInAir(265)) {
-                // Jump animation 
-                this.playAnimationJumping(this.imagesJumping);
-                this.idleCounter = 0;
+                this.jumpAnimation();
             } else { // Character on the Ground
-                this.currentImgJumping = 0; // Wenn er auf dem Boden steht wird der wert auf 0 gesetzt damit er beim nächsten sprung wieder beim ersten Bild anfängt
-                if (this.world.keyboard.right || this.world.keyboard.left) {
-                    // Walk animation
-                    this.playAnimation(this.imagesWalking);
-                    this.idleCounter = 0;
-                } else { // Wenn er stehen bleibt
-                    if (this.idleCounter < 10) {
-                        this.playAnimation(this.imagesIdle);
-                        this.idleCounter += 0.5;
-                    } else {
-                        this.playAnimation(this.imagesLongIdle);
-                    }
-                }
+                this.characterOnGround()
             }
         }, 105);
     }
 
+    deadActions() {
+        this.playAnimation(this.imagesDead);
+        if (!this.gameover) {
+            gameOver();
+            this.dieSound.play();
+            this.gameover = true;
+        }
+    }
+
+    isHurtActions() {
+        this.playAnimation(this.imagesHit);
+        this.idleCounter = 0;
+        this.hitSound.play();
+        this.walkingSound.volume = 0;
+    }
+
+    jumpAnimation() {
+        this.playAnimationJumping(this.imagesJumping);
+        this.idleCounter = 0;
+    }
+
+    characterOnGround() {
+        this.walkingSound.volume = 0.3;
+        this.currentImgJumping = 0; // Wenn er auf dem Boden steht wird der wert auf 0 gesetzt damit er beim nächsten sprung wieder beim ersten Bild anfängt
+        this.CharacterMoveLeftOrRight() && this.walkAnimation();
+        if (!this.CharacterMoveLeftOrRight()) { // Wenn er stehen bleibt
+            this.playWalkingSound = false;
+            this.walkingSound.pause();
+            this.idleAnimationAndSnoreSound();
+        }
+    }
+
+    CharacterMoveLeftOrRight() {
+        return this.world.keyboard.right || this.world.keyboard.left;
+    }
+
+    walkAnimation() {
+        this.playAnimation(this.imagesWalking);
+        this.idleCounter = 0;
+        this.playsnoreSound = false;
+        this.snoreSound.pause();
+    }
+
+    idleAnimationAndSnoreSound() {
+        if (this.idleCounter < 10 && play) {
+            this.playAnimation(this.imagesIdle);
+            this.idleCounter += 0.5;
+        } else {
+            this.playAnimation(this.imagesLongIdle);
+            if (!this.playsnoreSound && play) {
+                this.snoreSound.currentTime = 0;
+                this.snoreSound.volume = 0.3;
+                this.snoreSound.play();
+                this.playsnoreSound = true
+            }
+        }
+    }
 }

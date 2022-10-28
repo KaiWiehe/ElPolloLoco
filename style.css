@@ -37,6 +37,7 @@ body {
     height: 100vh;
     margin: 0;
     background: url(assets/img/bg/desertBG2.png);
+    background-size: cover;
     background-position: center;
     overflow-x: hidden;
     overflow-y: hidden;

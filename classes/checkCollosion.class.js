@@ -6,6 +6,16 @@ class CheckCollosion {
 
     openWinGame = false;
 
+    chickenKillSound = new Audio('assets/audio/chickenKill.mp3');
+    smallChickenKillSound = new Audio('assets/audio/smallChickenKill.m4a');
+    endbossKillSound = new Audio('assets/audio/endbossKill.mp3');
+    barbedWireSound = new Audio('assets/audio/barbedWire2.mp3');
+    pickCoinSound = new Audio('assets/audio/picCoin.wav');
+    pickBottleSound = new Audio('assets/audio/pickBottle.wav');
+
+    playbarbedWireSound = false;
+    playEndbossDeadSound = false;
+
     constructor(world) {
         this.world = world;
         this.checkCollosion();
@@ -33,16 +43,7 @@ class CheckCollosion {
         this.world.level.chickens.forEach((chicken) => {
             if (this.world.character.isColliding(chicken) && (this.world.character.isCharacterInAir(265))) {
                 if (!chicken.dead) {
-                    if (chicken instanceof SmallChicken) {
-                        chicken.loadImg('assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
-                    } else {
-                        chicken.loadImg('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
-                    }
-                    chicken.speed = 0;
-                    clearInterval(chicken.moveLeftInterval); //stoppt die Intervalle
-                    clearInterval(chicken.playAnimationInterval); //stoppt die Intervalle
-                    clearInterval(chicken.jumpInterval); //stoppt die Intervalle
-                    chicken.dead = true; // damit der keinen schaden mehr macht
+                    this.killChicken(chicken);
                     this.world.character.speedY = 10;
                 }
             } else if (this.world.character.isColliding(chicken)) {
@@ -80,6 +81,8 @@ class CheckCollosion {
                 this.invisible(coin);
                 this.world.coinCounter += 10;
                 this.world.statBarCoin.setCoinPersentage(this.world.coinCounter);
+                this.pickCoinSound.play();
+                this.pickCoinSound.volume = 0.3;
             }
         });
     }
@@ -91,45 +94,39 @@ class CheckCollosion {
                 this.invisible(bottle);
                 this.world.bottleCounter += 10;
                 this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
+                this.pickBottleSound.play();
+                this.pickBottleSound.volume = 0.4;
             }
         });
     }
 
     collisionCharacterBarbedWire() {
-        if (this.world.character.isColliding(this.world.level.clouds[1])) {
+        if (this.world.character.isColliding(this.world.level.clouds[7])) {
             this.CharacterLoseEnergy();
+            if (!this.playbarbedWireSound) {
+                this.barbedWireSound.play();
+                this.barbedWireSound.currentTime = 8;
+                this.stopBarbedWireSound();
+                this.playbarbedWireSound = true;
+            }
+        } else {
+            this.playbarbedWireSound = false;
+            this.barbedWireSound.currentTime = 0;
+            this.barbedWireSound.pause();
         };
+        !play && this.barbedWireSound.pause();
     }
 
     /** check if you shot a chicken, show the dead chicken IMG */
     shotChicken() {
         this.world.throwableObjects.forEach((bottle) => {
-            for (let i = 0; i < this.chicken.length; i++) {
-                if (this.chicken[i].isColliding(bottle) && !bottle.broken && this.chicken[i].alive) {
-                    this.chicken[i].alive = false;
-                    if (this.chicken[i] instanceof SmallChicken) {
-                        this.chicken[i].loadImg('assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
-                    } else {
-                        this.chicken[i].loadImg('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
-                    }
-                    this.chicken[i].speed = 0;
-                    clearInterval(this.chicken[i].moveLeftInterval); //stoppt die Intervalle
-                    clearInterval(this.chicken[i].playAnimationInterval); //stoppt die Intervalle
-                    clearInterval(this.chicken[i].jumpInterval); //stoppt die Intervalle
-                    this.chicken[i].dead = true; // damit der keinen schaden mehr macht
+            this.chicken.forEach((chicken) => {
+                if (chicken.isColliding(bottle) && !bottle.broken && chicken.alive) {
+                    this.killChicken(chicken);
                     //-----------------------
-                    setTimeout(() => {
-                        bottle.flying = false;
-                        bottle.splash = true;
-                        bottle.speedY = 0;
-                        bottle.speedX = 0;
-                    }, 100);
-                    setTimeout(() => {
-                        this.invisible(bottle);
-                        bottle.broken = true;
-                    }, 500);
+                    this.bottleActions(bottle);
                 }
-            }
+            })
         })
     }
 
@@ -138,7 +135,6 @@ class CheckCollosion {
         this.world.throwableObjects.forEach((bottle) => {
             if (this.endboss.isColliding(bottle) && !bottle.broken) {
                 this.endboss.hit(0.60);
-                console.log(this.endboss.energy);
                 this.world.statBarEndboss.setEndbossPersentage(this.endboss.energy)
                 if (this.endboss.energy <= 0) {
                     clearInterval(this.endboss.playAnimationInterval); //stoppt die Intervalle
@@ -152,16 +148,7 @@ class CheckCollosion {
                     }, 1500);
                 }
                 //-----------------------
-                setTimeout(() => {
-                    bottle.flying = false;
-                    bottle.splash = true;
-                    bottle.speedY = 0;
-                    bottle.speedX = 0;
-                }, 100);
-                setTimeout(() => {
-                    this.invisible(bottle);
-                    bottle.broken = true;
-                }, 500);
+                this.bottleActions(bottle);
             }
         })
     }
@@ -169,15 +156,21 @@ class CheckCollosion {
     /** check if endboss is dead and play dead animation */
     checkEndbossDead() {
         setInterval(() => {
+            if (this.endboss.dead) {
+                this.playEndbossDeadSound = true;
+            }
             if (this.endboss.dead && this.endboss.currentImgEndboss <= 2) { // er soll nach dem dritten Bild wieder aufhören
                 this.endboss.stopAllIntervals();
                 this.endboss.playAnimationEndboss(this.endboss.imagesDead);
+                if (this.playEndbossDeadSound) {
+                    this.endbossKillSound.play();
+                    this.endbossKillSound.volume = 0.3;
+                    this.playEndbossDeadSound = false;
+                }
             }
         }, 200);
         setInterval(() => {
-            if (this.endboss.dead) {
-                this.endboss.y += 10;
-            }
+            if (this.endboss.dead) this.endboss.y += 10;
         }, 1000 / 30);
     }
 
@@ -192,4 +185,52 @@ class CheckCollosion {
         this.world.statBarHealth.setHealthPersentage(this.world.character.energy); // Zieht der StatBar leben ab, Zeigt also das richtige bild je nach Lebensprozent
     }
 
+    stopBarbedWireSound() {
+        setInterval(() => {
+            if (this.barbedWireSound.currentTime >= 15) {
+                this.barbedWireSound.currentTime = 0;
+                this.barbedWireSound.pause();
+            }
+        }, 100);
+    }
+
+    smallChickenDead(chicken) {
+        this.smallChickenKillSound.play();
+        this.smallChickenKillSound.volume = 0.3;
+        chicken.loadImg('assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
+    }
+
+    chickenDead(chicken) {
+        this.chickenKillSound.play();
+        this.chickenKillSound.volume = 0.3;
+        chicken.loadImg('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+    }
+
+    killChicken(chicken) {
+        chicken.alive = false;
+        if (chicken instanceof SmallChicken) {
+            this.smallChickenDead(chicken);
+        } else {
+            this.chickenDead(chicken);
+        }
+        chicken.speed = 0;
+        clearInterval(chicken.moveLeftInterval); //stoppt die Intervalle
+        clearInterval(chicken.playAnimationInterval); //stoppt die Intervalle
+        clearInterval(chicken.jumpInterval); //stoppt die Intervalle
+        chicken.dead = true; // damit der keinen schaden mehr macht
+    }
+
+    bottleActions(bottle) {
+        setTimeout(() => {
+            bottle.flying = false;
+            bottle.splash = true;
+            bottle.speedY = 0;
+            bottle.speedX = 0;
+            bottle.bottleSounds();
+        }, 100);
+        setTimeout(() => {
+            this.invisible(bottle);
+            bottle.broken = true;
+        }, 500);
+    }
 }

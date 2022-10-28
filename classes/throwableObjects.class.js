@@ -24,6 +24,9 @@ class ThrowableObjects extends MovableObject {
 
     broken = false;
 
+    brokenBottleSound = new Audio('assets/audio/brokenBottle.wav');
+    throwBottleSound = new Audio('assets/audio/throwBottle.wav');
+
     constructor(x, y, otherDirection, short) {
         super().loadImg('assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.loadImgArray(this.imagesFlying);
@@ -41,6 +44,7 @@ class ThrowableObjects extends MovableObject {
     }
 
     throw () {
+        this.bottleSounds();
         this.speedY = 15; // speed nach oben
         this.applyGravity();
         if (!this.otherDirection2) { // throw right
@@ -59,11 +63,26 @@ class ThrowableObjects extends MovableObject {
             if (this.flying) {
                 this.playAnimation(this.imagesFlying);
             }
+
+            console.log(this.splash);
         }, 70)
         setInterval(() => {
             if (this.splash) {
                 this.playAnimation(this.imagesSplash);
             }
         }, 200)
+    }
+
+    bottleSounds() {
+        if (this.flying) {
+            this.throwBottleSound.play();
+            this.throwBottleSound.volume = 0.2;
+        }
+        console.log(this.splash);
+        if (this.splash) {
+            this.brokenBottleSound.play();
+            this.brokenBottleSound.volume = 0.1;
+        }
+
     }
 }

@@ -64,7 +64,10 @@ class Endboss extends MovableObject {
     walkingIntervalActive = false;
     alertIntervalActive = false;
 
-    speed = 0; //1.5
+    speed = 1.5; //1.5
+
+    endbossAttackSound = new Audio('assets/audio/endbossAttack.wav');
+    playEndbossAttackSound = false;
 
     /* #############################################   Funktionen   ############################################# */
 
@@ -108,8 +111,16 @@ class Endboss extends MovableObject {
         setTimeout(() => { // sonst kommt manchmal ein error, weil der character noch nicht fertig geladen ist
             setInterval(() => {
                 if (this.world.character.x >= 2000) {
+                    this.playEndbossAttackSound = true;
+                }
+                if (this.world.character.x >= 2000) {
                     clearInterval(this.playAlertInterval);
                     this.alertIntervalActive = false; // damit er losläuft
+                    if (this.playEndbossAttackSound && play) {
+                        this.endbossAttackSound.play();
+                        this.endbossAttackSound.volume = 0.3;
+                        this.playEndbossAttackSound = false;
+                    }
                 }
             }, 100);
         }, 2000);

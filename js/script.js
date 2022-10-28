@@ -4,6 +4,10 @@ let keyboard = new Keyboard();
 let play = false;
 let timerInterval;
 
+windSound = new Audio('assets/audio/wind.mp3');
+loseSound = new Audio('assets/audio/lose.wav');
+winSound = new Audio('assets/audio/win.wav');
+
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
@@ -124,6 +128,8 @@ function closeAll() {
 
 function startGame() {
     closeAll();
+    windSound.play();
+    windSound.volume = 0.3;
     canvas.classList.remove('d-none');
     play = true
     startTimer();
@@ -133,6 +139,9 @@ function startGame() {
 }
 
 function gameOver() {
+    windSound.pause();
+    loseSound.play();
+    loseSound.volume = 0.3;
     let gameOver = document.getElementById('gameOver');
     closeAll();
     play = false;
@@ -160,6 +169,8 @@ function openBestPlayer() {
 
 function openWinGame() {
     play = false;
+    windSound.pause();
+    winSound.play();
     closeAll();
     winGame.classList.remove('d-none');
     document.getElementById('coins').innerHTML = world.coinCounter / 10 + ' / 10';
@@ -267,12 +278,14 @@ function fullscreen() {
 }
 
 function enterFullscreen(element) {
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.msRequestFullscreen) { // for IE11 (remove June 15, 2022)
-        element.msRequestFullscreen();
-    } else if (element.webkitRequestFullscreen) { // iOS Safari
-        element.webkitRequestFullscreen();
+    if (!play) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.msRequestFullscreen) { // for IE11 (remove June 15, 2022)
+            element.msRequestFullscreen();
+        } else if (element.webkitRequestFullscreen) { // iOS Safari
+            element.webkitRequestFullscreen();
+        }
     }
 }
 
