@@ -14,8 +14,8 @@
         display: flex;
         margin: auto;
     }
-    .contentContainer {
-        width: 88%;
+    .win {
+        font-size: 2.5rem;
     }
 }
 
@@ -26,18 +26,10 @@
     li {
         padding: 20px 0 20px 37px
     }
-    .li-right {
-        background-size: 25%;
-    }
-    .li-left {
-        background-size: 25%;
-    }
-    .li-jump {
-        background-size: 25%;
-    }
-    .li-throw {
-        background-size: 25%;
-    }
+    .li-right,
+    .li-left,
+    .li-jump,
+    .li-throw,
     .li-throw-short {
         background-size: 25%;
     }
@@ -54,17 +46,6 @@
     .info {
         display: none;
     }
-    .contentContainer {
-        width: 100%;
-    }
-    .settings,
-    .music,
-    .bestPlayer,
-    .winGame {
-        max-height: 100vh;
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-    }
     .ud_menu_icon {
         display: block;
     }
@@ -75,40 +56,15 @@
         width: 4rem;
         opacity: 0.3;
     }
-    .gameOver img {
-        height: 100vh;
-    }
 }
 
 @media only screen and (max-height: 480px) {
-    canvas {
-        height: 100vh;
-    }
-    .contentContainer {
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-    }
-    .startScreen img:first-of-type {
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-    }
-    .settings,
-    .music,
-    .bestPlayer,
-    .winGame {
-        max-height: 100vh;
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-    }
     .hud {
         bottom: 0;
     }
     .hud img {
         width: 6rem;
         opacity: 0.3;
-    }
-    .gameOver img {
-        height: 100vh;
     }
 }
 
@@ -118,5 +74,24 @@
     }
     .ud_menu_icon {
         display: block;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    .settings,
+    .history,
+    .bestPlayer,
+    .winGame {
+        font-size: 1.2rem;
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+    .box {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+    #coins {
+        font-size: 2rem;
+    }
+    #timer {
+        font-size: 2rem;
     }
 }

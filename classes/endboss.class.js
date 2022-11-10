@@ -54,8 +54,6 @@ class Endboss extends MovableObject {
 
     animationInterval
 
-    dead = false;
-
     energy = 100;
 
     world;
@@ -63,8 +61,9 @@ class Endboss extends MovableObject {
     attackIntervalActive = false;
     walkingIntervalActive = false;
     alertIntervalActive = false;
+    hurtIntervalActive = false;
 
-    speed = 1.5; //1.5
+    speed = 2; //2
 
     endbossAttackSound = new Audio('assets/audio/endbossAttack.wav');
     playEndbossAttackSound = false;
@@ -87,6 +86,7 @@ class Endboss extends MovableObject {
         this.attackIntervalActive = false;
         this.walkingIntervalActive = false;
         this.alertIntervalActive = false;
+        this.hurtIntervalActive = false;
     }
 
     animations() {
@@ -98,6 +98,16 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.imagesWalking);
             }
         }, 300)
+        setInterval(() => {
+            if (this.hurtIntervalActive) {
+                if (this.currentImgEndbossHurt <= 2) {
+                    this.playAnimationEndbossHurt(this.imagesHurt);
+                } else {
+                    this.currentImgEndbossHurt = 0;
+                    this.hurtIntervalActive = false;
+                }
+            }
+        }, 200);
     }
 
     alert() {

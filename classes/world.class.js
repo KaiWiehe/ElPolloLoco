@@ -37,72 +37,12 @@ class World {
     }
 
     draw() {
-        //leert den canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // ist dafür da das sich die Kamera bewegt und nicht der Character
-        this.ctx.translate(this.cameraX, 0);
-        /** Background
-         * zeigt den Background an*/
-        this.addArrayToMap(this.level.background);
-
-        /** Character
-         * zeigt den Character an*/
-        this.addObjectToMap(this.character)
-
-        /** bottle
-         * zeigt den bottle an*/
-        this.addArrayToMap(this.level.bottle);
-
-        /**chickens
-         * geht mit einer for schleife durch alle chickens und zeigt sie an*/
-        this.addArrayToMap(this.level.chickens);
-
-        /**endboss
-         * geht mit einer for schleife durch alle endboss und zeigt sie an*/
-        this.addArrayToMap(this.level.endboss);
-
-        /**Clouds
-         * geht mit einer for schleife durch alle clouds und zeigt sie an*/
-        this.addArrayToMap(this.level.clouds);
-
-        /** Coin
-         * zeigt den Coin an*/
-        this.addArrayToMap(this.level.coin);
-
-        /** bottle
-         * zeigt den bottle an*/
-        this.addArrayToMap(this.throwableObjects);
-
-
-        this.ctx.translate(-this.cameraX, 0);
-        //------------------------Space for fix Objects------------------------
-        /** StatBarHealth
-         * zeigt den StatBar an*/
-        this.addObjectToMap(this.statBarHealth);
-
-        /** StatBarCoin
-         * zeigt den StatBar an*/
-        this.addObjectToMap(this.statBarCoin);
-
-        /** StatBarBottle
-         * zeigt den StatBar an*/
-        this.addObjectToMap(this.statBarBottle);
-
-        /** StatBarEndboss
-         * zeigt den StatBar an*/
-        this.addObjectToMap(this.statBarEndboss);
-        //------------------------End------------------------
-        this.ctx.translate(this.cameraX, 0);
-
-        // ist dafür da das sich die Kamera bewegt und nicht der Character  
-        this.ctx.translate(-this.cameraX, 0);
-
-        //lädt die funktion neu
-        let self = this;
-        requestAnimationFrame(function() {
-            self.draw();
-        })
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //leert den canvas
+        this.ctx.translate(this.cameraX, 0); // ist dafür da das sich die Kamera bewegt und nicht der Character
+        this.addMovableObjects();
+        this.addFixedObjects();
+        this.ctx.translate(-this.cameraX, 0); // ist dafür da das sich die Kamera bewegt und nicht der Character  
+        this.reloadDrawFunction();
     }
 
     /**
@@ -150,5 +90,35 @@ class World {
     flipImgBack(object) {
         this.ctx.restore();
         object.x = object.x * -1;
+    }
+
+    addFixedObjects() {
+        this.ctx.translate(-this.cameraX, 0);
+        //------------------------Space for fix Objects------------------------
+        this.addObjectToMap(this.statBarHealth);
+        this.addObjectToMap(this.statBarCoin);
+        this.addObjectToMap(this.statBarBottle);
+        this.addObjectToMap(this.statBarEndboss);
+        //------------------------End------------------------
+        this.ctx.translate(this.cameraX, 0);
+    }
+
+    addMovableObjects() {
+        this.addArrayToMap(this.level.background);
+        this.addObjectToMap(this.character)
+        this.addArrayToMap(this.level.bottle);
+        this.addArrayToMap(this.level.chickens);
+        this.addArrayToMap(this.level.endboss);
+        this.addArrayToMap(this.level.clouds);
+        this.addArrayToMap(this.level.coin);
+        this.addArrayToMap(this.throwableObjects);
+    }
+
+    reloadDrawFunction() {
+        //lädt die funktion neu
+        let self = this;
+        requestAnimationFrame(function() {
+            self.draw();
+        })
     }
 }

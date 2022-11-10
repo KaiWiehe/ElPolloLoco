@@ -7,7 +7,8 @@ class drawableObjects {
 
     currentImg = 0;
     currentImgJumping = 0;
-    currentImgEndboss = 0;
+    currentImgEndbossDead = 0;
+    currentImgEndbossHurt = 0;
     currentImgBottle = 0;
 
     imageCache = {};

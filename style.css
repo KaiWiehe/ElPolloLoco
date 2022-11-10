@@ -11,6 +11,10 @@
     display: none !important;
 }
 
+html {
+    height: -webkit-fill-available;
+}
+
 * {
     -webkit-touch-callout: none;
     /* iOS Safari */
@@ -26,6 +30,7 @@
     /* Non-prefixed version, currently
     supported by Chrome, Edge, Opera and Firefox */
     box-sizing: border-box;
+    height: -moz-available, -webkit-fill-available;
 }
 
 body {
@@ -41,6 +46,16 @@ body {
     background-position: center;
     overflow-x: hidden;
     overflow-y: hidden;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+.loader {
+    background: black url(assets/img/bg/loader.gif) no-repeat center center;
+    height: 100vh;
+    width: 100%;
+    z-index: 99;
+    position: fixed;
 }
 
 .contentContainer {
@@ -171,18 +186,8 @@ li.a:hover {
     background-color: transparent;
 }
 
-
-/* .music {
-    color: white;
-    font-size: 2rem;
-    height: 20rem;
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-} */
-
 .settings,
-.music,
+.history,
 .bestPlayer,
 .winGame {
     display: flex;

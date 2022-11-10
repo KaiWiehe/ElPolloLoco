@@ -63,8 +63,6 @@ class ThrowableObjects extends MovableObject {
             if (this.flying) {
                 this.playAnimation(this.imagesFlying);
             }
-
-            console.log(this.splash);
         }, 70)
         setInterval(() => {
             if (this.splash) {
@@ -78,11 +76,9 @@ class ThrowableObjects extends MovableObject {
             this.throwBottleSound.play();
             this.throwBottleSound.volume = 0.2;
         }
-        console.log(this.splash);
         if (this.splash) {
             this.brokenBottleSound.play();
             this.brokenBottleSound.volume = 0.1;
         }
-
     }
 }
