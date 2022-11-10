@@ -117,17 +117,13 @@ function reload() {
 function closeAll() {
     let startScreen = document.getElementById('startScreen');
     let gameOver = document.getElementById('gameOver');
-    let history = document.getElementById('history');
     let settings = document.getElementById('settings');
-    let bestPlayer = document.getElementById('bestPlayer');
     let winGame = document.getElementById('winGame');
     let hud = document.getElementById('hud');
     canvas.classList.add('d-none');
     startScreen.classList.add('d-none');
     gameOver.classList.add('d-none');
-    history.classList.add('d-none');
     settings.classList.add('d-none');
-    bestPlayer.classList.add('d-none');
     winGame.classList.add('d-none');
     hud.classList.add('d-none');
 }
@@ -155,23 +151,10 @@ function gameOver() {
     world.level.endboss[0].energy = 100; // sonst kann es dazu kommen das erst der gameover screen gezeigt wird und dann der win screen. weil der endboss kurz danach stirbt
 }
 
-function openHistory() {
-    closeAll();
-    play = false;
-    let history = document.getElementById('history');
-    history.classList.remove('d-none');
-}
-
 function openSettings() {
     closeAll();
     play = false;
     settings.classList.remove('d-none');
-}
-
-function openBestPlayer() {
-    closeAll();
-    play = false;
-    bestPlayer.classList.remove('d-none');
 }
 
 function openWinGame() {
