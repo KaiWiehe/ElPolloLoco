@@ -1,5 +1,4 @@
 class Cloud extends MovableObject {
-
     x = Math.random() * 2400;
     y = 20;
     width = 500;
@@ -12,10 +11,10 @@ class Cloud extends MovableObject {
         this.animate();
     }
 
-    /** Lässt die Wolken langsam nach links bewegen */
+    /** Makes the clouds slowly move to the left */
     animate() {
         setInterval(() => {
             this.moveLeft();
-        }, 1000 / 60)
+        }, 1000 / 60);
     }
 }

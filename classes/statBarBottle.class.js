@@ -21,7 +21,12 @@ class StatBarBottle extends drawableObjects {
         this.height = 50;
     }
 
-    //setHealthPersentage(50);
+    /**
+     * @example
+     * setBottlePersentage(50);
+     * //shows the 50% IMG
+     * @param {number} persentage
+     */
     setBottlePersentage(persentage) {
         this.percentage = persentage; // => 0...
         let path = this.imagesBottle[this.resolveImgIndex()];

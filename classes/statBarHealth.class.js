@@ -11,7 +11,8 @@ class StatBarHealth extends drawableObjects {
 
     /* #############################################   Funktionen   ############################################# */
 
-    constructor() { //backgroundPath, x, y, width, heightTODO
+    constructor() {
+        //backgroundPath, x, y, width, heightTODO
         super().loadImgArray(this.imagesHealth);
         this.setHealthPersentage(100);
         this.x = 10;
@@ -20,7 +21,12 @@ class StatBarHealth extends drawableObjects {
         this.height = 50;
     }
 
-    //setHealthPersentage(50);
+    /**
+     * @example
+     * setHealthPersentage(50);
+     * //shows the 50% IMG
+     * @param {number} persentage
+     */
     setHealthPersentage(persentage) {
         this.percentage = persentage; // => 0...
         let path = this.imagesHealth[this.resolveImgIndex()];

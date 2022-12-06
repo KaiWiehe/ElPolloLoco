@@ -33,26 +33,18 @@ class Endboss extends MovableObject {
         'assets/img/4_enemie_boss_chicken/3_attack/G20.png',
     ];
 
-    imagesHurt = [
-        'assets/img/4_enemie_boss_chicken/4_hurt/G21.png',
-        'assets/img/4_enemie_boss_chicken/4_hurt/G22.png',
-        'assets/img/4_enemie_boss_chicken/4_hurt/G23.png',
-    ];
+    imagesHurt = ['assets/img/4_enemie_boss_chicken/4_hurt/G21.png', 'assets/img/4_enemie_boss_chicken/4_hurt/G22.png', 'assets/img/4_enemie_boss_chicken/4_hurt/G23.png'];
 
-    imagesDead = [
-        'assets/img/4_enemie_boss_chicken/5_dead/G24.png',
-        'assets/img/4_enemie_boss_chicken/5_dead/G25.png',
-        'assets/img/4_enemie_boss_chicken/5_dead/G26.png',
-    ];
+    imagesDead = ['assets/img/4_enemie_boss_chicken/5_dead/G24.png', 'assets/img/4_enemie_boss_chicken/5_dead/G25.png', 'assets/img/4_enemie_boss_chicken/5_dead/G26.png'];
 
     offset = {
         top: 60,
         bottom: 30,
         left: 40,
-        right: 40
-    }
+        right: 40,
+    };
 
-    animationInterval
+    animationInterval;
 
     energy = 100;
 
@@ -90,49 +82,42 @@ class Endboss extends MovableObject {
     }
 
     animations() {
+        this.walkingAndAttackAnimation();
+        this.hurtAnimation();
+    }
+
+    walkingAndAttackAnimation() {
         this.animationInterval = setInterval(() => {
-            if (this.attackIntervalActive) {
-                this.playAnimation(this.imagesAttack);
-            }
-            if (this.walkingIntervalActive) {
-                this.playAnimation(this.imagesWalking);
-            }
-        }, 300)
+            this.attackIntervalActive && this.playAnimation(this.imagesAttack);
+            this.walkingIntervalActive && this.playAnimation(this.imagesWalking);
+        }, 300);
+    }
+
+    hurtAnimation() {
         setInterval(() => {
             if (this.hurtIntervalActive) {
-                if (this.currentImgEndbossHurt <= 2) {
-                    this.playAnimationEndbossHurt(this.imagesHurt);
-                } else {
-                    this.currentImgEndbossHurt = 0;
-                    this.hurtIntervalActive = false;
-                }
+                this.currentImgEndbossHurt <= 2 ? this.playAnimationEndbossHurt(this.imagesHurt) : ((this.currentImgEndbossHurt = 0), (this.hurtIntervalActive = false));
             }
         }, 200);
     }
 
     alert() {
-        this.playAlertInterval = setInterval(() => {
-            this.playAnimation(this.imagesAlert);
-        }, 300)
+        this.playAlertInterval = setInterval(() => this.playAnimation(this.imagesAlert), 300);
         this.alertIntervalActive = true;
     }
 
     stopAlert() {
-        setTimeout(() => { // sonst kommt manchmal ein error, weil der character noch nicht fertig geladen ist
-            setInterval(() => {
-                if (this.world.character.x >= 2000) {
-                    this.playEndbossAttackSound = true;
+        setInterval(() => {
+            this.world && this.world.character.x >= 2000 && (this.playEndbossAttackSound = true);
+            if (this.world && this.world.character.x >= 2000) {
+                clearInterval(this.playAlertInterval);
+                this.alertIntervalActive = false; // damit er losläuft
+                if (this.playEndbossAttackSound && play) {
+                    this.endbossAttackSound.play();
+                    this.endbossAttackSound.volume = 0.3;
+                    this.playEndbossAttackSound = false;
                 }
-                if (this.world.character.x >= 2000) {
-                    clearInterval(this.playAlertInterval);
-                    this.alertIntervalActive = false; // damit er losläuft
-                    if (this.playEndbossAttackSound && play) {
-                        this.endbossAttackSound.play();
-                        this.endbossAttackSound.volume = 0.3;
-                        this.playEndbossAttackSound = false;
-                    }
-                }
-            }, 100);
-        }, 2000);
+            }
+        }, 100);
     }
 }

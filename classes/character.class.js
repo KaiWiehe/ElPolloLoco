@@ -1,12 +1,11 @@
 class Character extends MovableObject {
-
     imagesWalking = [
         'assets/img/2_character_pepe/2_walk/W-21.png',
         'assets/img/2_character_pepe/2_walk/W-22.png',
         'assets/img/2_character_pepe/2_walk/W-23.png',
         'assets/img/2_character_pepe/2_walk/W-24.png',
         'assets/img/2_character_pepe/2_walk/W-25.png',
-        'assets/img/2_character_pepe/2_walk/W-26.png'
+        'assets/img/2_character_pepe/2_walk/W-26.png',
     ];
     imagesJumping = [
         'assets/img/2_character_pepe/3_jump/J-31.png',
@@ -17,7 +16,7 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/3_jump/J-36.png',
         'assets/img/2_character_pepe/3_jump/J-37.png',
         'assets/img/2_character_pepe/3_jump/J-38.png',
-        'assets/img/2_character_pepe/3_jump/J-39.png'
+        'assets/img/2_character_pepe/3_jump/J-39.png',
     ];
     imagesDead = [
         'assets/img/2_character_pepe/5_dead/D-51.png',
@@ -26,13 +25,9 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/5_dead/D-54.png',
         'assets/img/2_character_pepe/5_dead/D-55.png',
         'assets/img/2_character_pepe/5_dead/D-56.png',
-        'assets/img/2_character_pepe/5_dead/D-57.png'
+        'assets/img/2_character_pepe/5_dead/D-57.png',
     ];
-    imagesHit = [
-        'assets/img/2_character_pepe/4_hurt/H-41.png',
-        'assets/img/2_character_pepe/4_hurt/H-42.png',
-        'assets/img/2_character_pepe/4_hurt/H-43.png'
-    ];
+    imagesHit = ['assets/img/2_character_pepe/4_hurt/H-41.png', 'assets/img/2_character_pepe/4_hurt/H-42.png', 'assets/img/2_character_pepe/4_hurt/H-43.png'];
 
     imagesIdle = [
         'assets/img/2_character_pepe/1_idle/idle/I-1.png',
@@ -58,7 +53,7 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/1_idle/long_idle/I-18.png',
         'assets/img/2_character_pepe/1_idle/long_idle/I-19.png',
         'assets/img/2_character_pepe/1_idle/long_idle/I-20.png',
-    ]
+    ];
 
     // ##########################################################################################################
 
@@ -80,8 +75,8 @@ class Character extends MovableObject {
         top: 60,
         bottom: 5,
         left: 15,
-        right: 20
-    }
+        right: 20,
+    };
 
     bottleShortOrLong;
 
@@ -101,21 +96,18 @@ class Character extends MovableObject {
         this.loadImgArray(this.imagesIdle);
         this.loadImgArray(this.imagesLongIdle);
         this.animate();
-        this.applyGravity()
+        this.applyGravity();
     }
 
     animate() {
-        this.CharacterMovementAndSounds()
+        this.characterMovementAndSounds();
         this.shotInterval();
         this.animationAndSoundsInterval();
     }
 
-    CharacterMovementAndSounds() {
+    characterMovementAndSounds() {
         setInterval(() => {
-            if (play) {
-                this.CharMovementAndSounds();
-                this.setCamera();
-            }
+            play && (this.CharMovementAndSounds(), this.setCamera());
         }, 1000 / 60);
     }
 
@@ -128,7 +120,7 @@ class Character extends MovableObject {
     }
 
     allowToJump() {
-        return this.world.keyboard.space && (!this.isCharacterInAir(265));
+        return this.world.keyboard.space && !this.isCharacterInAir(265);
     }
 
     playWalkingSounds() {
@@ -173,15 +165,16 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * This function causes the camera to move and not just the character
+     * and places the character with a distance from the left edge.
+     */
     setCamera() {
-        // damit er nicht am linken Rand klebt muss ich hier den x-Wert aus der Klasse MO gebens
-        // damit er einen abstand zum Linken Rand hat 
-        // Das macht das sich nur die Kamera bewegt
         this.world.cameraX = 120 + -this.x;
     }
 
     shotInterval() {
-        setInterval(() => { // muss in eine andere schleife weil die andere zu schnell ist, da wirft er eine ganze schlange von flaschen
+        setInterval(() => {
             if (this.allowToShot()) {
                 this.allowToLongShot() && this.shot(false);
                 this.allowToShortShot() && this.shot(true);
@@ -193,18 +186,23 @@ class Character extends MovableObject {
     }
 
     allowToShot() {
-        return this.world.keyboard.shot && !this.timeout || this.world.keyboard.shortShot && !this.timeout;
+        return (this.world.keyboard.shot && !this.timeout) || (this.world.keyboard.shortShot && !this.timeout);
     }
 
     allowToLongShot() {
         return this.world.keyboard.shot && this.world.bottleCounter > 0;
     }
 
+    /**
+     * short = true.
+     * long = false.
+     * @param {boolean} longOrShort
+     */
     shot(longOrShort) {
         this.bottleCounterIsNotEmty() && this.updateBottleCounterAndShot(longOrShort);
         this.timeout = true;
         setTimeout(() => {
-            this.timeout = false
+            this.timeout = false;
         }, 500);
     }
 
@@ -216,8 +214,13 @@ class Character extends MovableObject {
         return this.world.bottleCounter > 0;
     }
 
+    /**
+     * short = true.
+     * long = false.
+     * @param {boolean} longOrShort
+     */
     updateBottleCounterAndShot(longOrShort) {
-        this.bottleShortOrLong = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection, longOrShort); // die zahlen sind dazu da die flaschen von der richtigen position aus zu werden 
+        this.bottleShortOrLong = new ThrowableObjects(this.x + 20, this.y + 40, this.otherDirection, longOrShort); // the numbers are there to throw the bottles from the correct position
         this.world.throwableObjects.push(this.bottleShortOrLong);
         this.world.bottleCounter -= 10;
         this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
@@ -231,8 +234,9 @@ class Character extends MovableObject {
                 this.isHurtActions();
             } else if (this.isCharacterInAir(265)) {
                 this.jumpAnimation();
-            } else { // Character on the Ground
-                this.characterOnGround()
+            } else {
+                // Character on the Ground
+                this.characterOnGround();
             }
         }, 105);
     }
@@ -260,9 +264,11 @@ class Character extends MovableObject {
 
     characterOnGround() {
         this.walkingSound.volume = 0.3;
-        this.currentImgJumping = 0; // Wenn er auf dem Boden steht wird der wert auf 0 gesetzt damit er beim nächsten sprung wieder beim ersten Bild anfängt
+        this.currentImgJumping = 0;
+        // If he is on the ground, the value is set to 0 so that he starts again at the first frame the next time he jumps
         this.CharacterMoveLeftOrRight() && this.walkAnimation();
-        if (!this.CharacterMoveLeftOrRight()) { // Wenn er stehen bleibt
+        if (!this.CharacterMoveLeftOrRight()) {
+            // If he stops
             this.playWalkingSound = false;
             this.walkingSound.pause();
             this.idleAnimationAndSnoreSound();
@@ -290,7 +296,7 @@ class Character extends MovableObject {
                 this.snoreSound.currentTime = 0;
                 this.snoreSound.volume = 0.3;
                 this.snoreSound.play();
-                this.playsnoreSound = true
+                this.playsnoreSound = true;
             }
         }
     }

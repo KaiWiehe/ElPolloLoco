@@ -16,20 +16,24 @@ class MovableObject extends drawableObjects {
         this.x += this.speed;
     }
 
-    /** Lässt alles mit dem in der Variable "speed" angegebenden Geschwindigkeit nach liks bewegen */
+    /** Makes everything move left at the speed specified in the "speed" variable */
     moveLeft() {
         this.x -= this.speed;
     }
 
-    // Wenn ich laufe und springe gleichzeitig kommt er mit der CurrentImg Zahl durcheinander 
-    // deshalb habe ich das in zwei Funktionen aufgeteilt 
-    playAnimationJumping(images) { // TODO Kann ich bestimmt irgendwie in einer Funktion zusammenfassen
+    /**
+     * @param {array} images - array with a list of paths to the IMG's
+     */
+    playAnimationJumping(images) {
         let i = this.currentImgJumping % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImgJumping++;
     }
 
+    /**
+     * @param {array} images - array with a list of paths to the IMG's
+     */
     playAnimation(images) {
         let i = this.currentImg % images.length;
         let path = images[i];
@@ -37,7 +41,9 @@ class MovableObject extends drawableObjects {
         this.currentImg++;
     }
 
-
+    /**
+     * @param {array} images - array with a list of paths to the IMG's
+     */
     playAnimationEndbossDead(images) {
         let i = this.currentImgEndbossDead % images.length;
         let path = images[i];
@@ -45,6 +51,9 @@ class MovableObject extends drawableObjects {
         this.currentImgEndbossDead++;
     }
 
+    /**
+     * @param {array} images - array with a list of paths to the IMG's
+     */
     playAnimationEndbossHurt(images) {
         let i = this.currentImgEndbossHurt % images.length;
         let path = images[i];
@@ -52,27 +61,27 @@ class MovableObject extends drawableObjects {
         this.currentImgEndbossHurt++;
     }
 
-    //Gravitation
+    //gravity
     applyGravity() {
         setInterval(() => {
-            // Entweder PEPE ist über dem Boden oder ich habe die Sprung Taste gedückt, dadurch hat sich der this.speedY Wert hat sich erhöht
-            if ((this instanceof Character) || (this instanceof ThrowableObjects)) {
-                if (this.isCharacterInAir(265) || this.speedY > 0) {
-                    this.jumpOrFall();
-                }
-                if (!(this instanceof ThrowableObjects) && this.y >= 266) {
-                    this.speedY = 0
-                } //Wenn er auf dem Boden ist setzt sich der wert wieder zurück
-            }
-            if ((this instanceof Chicken) || (this instanceof SmallChicken)) {
-                if (this.isCharacterInAir(380) || this.speedY > 0) {
-                    this.jumpOrFall();
-                }
-                if (this.y >= 380) {
-                    this.speedY = 0
-                }
-            }
-        }, 1000 / 25)
+            this.gravityCharacterAndThrowableObjects();
+            this.gravityChickenAndSmallChicken();
+        }, 1000 / 25);
+    }
+
+    gravityCharacterAndThrowableObjects() {
+        if (this instanceof Character || this instanceof ThrowableObjects) {
+            if (this.isCharacterInAir(265) || this.speedY > 0) this.jumpOrFall();
+            !(this instanceof ThrowableObjects) && this.y >= 266 && (this.speedY = 0);
+            //When he's on the ground, the value resets
+        }
+    }
+
+    gravityChickenAndSmallChicken() {
+        if (this instanceof Chicken || this instanceof SmallChicken) {
+            if (this.isCharacterInAir(380) || this.speedY > 0) this.jumpOrFall();
+            this.y >= 380 && (this.speedY = 0);
+        }
     }
 
     jumpOrFall() {
@@ -80,6 +89,10 @@ class MovableObject extends drawableObjects {
         this.speedY -= this.acceleration;
     }
 
+    /**
+     * @param {number} number - Y coordinate
+     * @returns boolean
+     */
     isCharacterInAir(number) {
         if (this instanceof ThrowableObjects) {
             return true;
@@ -89,17 +102,23 @@ class MovableObject extends drawableObjects {
     }
 
     jump(jumpHeight) {
-        this.speedY = jumpHeight; //Sprunghöhe
+        this.speedY = jumpHeight;
     }
 
     isColliding(obj) {
-        return this.x + this.width - this.offset.right > obj.x + obj.offset.left && // Character.right || Enemy.left
+        return (
+            this.x + this.width - this.offset.right > obj.x + obj.offset.left && // Character.right || Enemy.left
             this.y + this.height - this.offset.bottom > obj.y + obj.offset.top && // Character.top || Enemy.bottom
             this.x + this.offset.left < obj.x + obj.width - obj.offset.right && // Character.left || Enemy.right
-            this.y + this.offset.top < obj.y + obj.height - obj.offset.bottom // Character.bottom || Enemy.top
+            this.y + this.offset.top < obj.y + obj.height - obj.offset.bottom
+        ); // Character.bottom || Enemy.top
     }
 
-    // Der Damage wird der Energy abgezogen
+    /**
+     * @example
+     * this.energy -= damage;
+     * @param {number} damage
+     */
     hit(damage) {
         this.energy -= damage;
         if (this.energy < 0) {
@@ -109,7 +128,9 @@ class MovableObject extends drawableObjects {
         }
     }
 
-    // ist für die Animation, Ist dafür da wie lange die Animation spielen soll
+    /**
+     *  so that you can only be hit every 0.5 s
+     */
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit; // difference in ms
         timepassed = timepassed / 1000; //difference in s
@@ -120,17 +141,17 @@ class MovableObject extends drawableObjects {
         return this.energy == 0;
     }
 
+    /**
+     * @param {number} jumpProbability - bigger than 1
+     */
     chickenJump(jumpProbability) {
         let allowJump = false;
         this.jumpInterval = setInterval(() => {
-            if (this.y === 380) { // damit das Huhn nicht zwei mal hintereinander springt
+            if (this.y === 380) {
+                // so the chicken doesn't jump twice in a row
                 let i = this.randomNumber(1, jumpProbability);
-                if (i === 1) {
-                    allowJump = true;
-                }
-                if (allowJump) {
-                    this.jump(18);
-                }
+                i === 1 && (allowJump = true);
+                allowJump && this.jump(18);
                 allowJump = false;
             }
         }, 500);
@@ -138,29 +159,15 @@ class MovableObject extends drawableObjects {
 
     animateChicken() {
         let moveLeft = true;
-        this.moveLeftInterval = setInterval(() => {
-            this.moveLeftOrRight(moveLeft);
-        }, 1000 / 60)
-        this.playAnimationInterval = setInterval(() => {
-            this.playAnimation(this.imagesWalking);
-        }, 300)
+        this.moveLeftInterval = setInterval(() => this.moveLeftOrRight(moveLeft), 1000 / 60);
+        this.playAnimationInterval = setInterval(() => this.playAnimation(this.imagesWalking), 300);
         setInterval(() => {
             let i = this.randomNumber(1, 3);
-            if (i === 1) {
-                moveLeft = false; //läuft nach rechts
-            } else {
-                moveLeft = true; //läuft nach links
-            }
+            i === 1 ? (moveLeft = false) : (moveLeft = true); //runs to Right / left
         }, 5000);
     }
 
     moveLeftOrRight(moveLeft) {
-        if (play && moveLeft) {
-            this.otherDirection = false;
-            this.moveLeft();
-        } else if (play) {
-            this.otherDirection = true;
-            this.moveRight();
-        }
+        play && moveLeft ? ((this.otherDirection = false), this.moveLeft()) : play && ((this.otherDirection = true), this.moveRight());
     }
 }

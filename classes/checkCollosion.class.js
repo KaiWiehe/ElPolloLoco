@@ -1,5 +1,4 @@
 class CheckCollosion {
-
     world;
     endboss;
     chicken;
@@ -38,102 +37,104 @@ class CheckCollosion {
 
             this.shotChicken(); // Bottle => Chicken
             this.shotEndboss(); // Bottle => Endboss
-        }, 1000 / 60); //10
+        }, 1000 / 60);
     }
 
-    /** if you hit the chicken with your body, you will lose energy.
-     * if you hit the chicken with your body and you are in the air, the chicken will die*/
+    /**
+     * if you hit the chicken with your body, you will lose energy.
+     * if you hit the chicken with your body and you are in the air, the chicken will die.
+     */
     collosionCharacterChicken() {
         this.world.level.chickens.forEach((chicken) => {
-            if (this.world.character.isColliding(chicken) && (this.world.character.isCharacterInAir(265))) {
+            if (this.world.character.isColliding(chicken) && this.world.character.isCharacterInAir(265)) {
                 this.jumpOnChicken(chicken);
             } else if (this.world.character.isColliding(chicken)) {
-                if (!chicken.dead) { // wenn das chicken noch lebt
+                if (!chicken.dead) {
+                    // if the chicken is still alive
                     this.CharacterLoseEnergy(0.5);
                 }
             }
         });
     }
 
-    /** if you hit the endboss with your body, you will lose energy */
+    /**
+     * if you hit the endboss with your body, you will lose energy.
+     */
     collisionCharacterEndboss() {
         this.world.level.endboss.forEach((endboss) => {
-            if (this.world.character.isColliding(endboss)) {
-                this.collissionEndboss(endboss);
-            } else { // spiele die walking animation
-                this.noCollisionEndboss(endboss);
-            }
+            this.world.character.isColliding(endboss) ? this.collissionEndboss(endboss) : this.noCollisionEndboss(endboss);
         });
     }
 
-    /** if you collect a coin, it will be invisible. And add the coin to your counter */
+    /**
+     * if you collect a coin, it will be invisible. And add the coin to your counter.
+     */
     collisionCharacterCoin() {
         this.world.level.coin.forEach((coin) => {
-            if (this.world.character.isColliding(coin)) {
-                this.collisionCoin(coin);
-            }
+            this.world.character.isColliding(coin) && this.collisionCoin(coin);
         });
     }
 
-    /** if you collect a bottle, it will be invisible. And add the bottle to your counter */
+    /**
+     * if you collect a bottle, it will be invisible. And add the bottle to your counter.
+     */
     collisionCharacterBottle() {
         this.world.level.bottle.forEach((bottle) => {
-            if (this.world.character.isColliding(bottle)) {
-                this.collisionBottle(bottle)
-            }
+            this.world.character.isColliding(bottle) && this.collisionBottle(bottle);
         });
     }
 
     collisionCharacterBarbedWire() {
-        if (this.world.character.isColliding(this.barbedWire)) {
-            this.collisionBarbedWire();
-        } else {
-            this.noCollisionBarbedWire();
-        };
+        this.world.character.isColliding(this.barbedWire) ? this.collisionBarbedWire() : this.noCollisionBarbedWire();
         !play && this.barbedWireSound.pause();
     }
 
-    /** check if you shot a chicken, show the dead chicken IMG */
+    /**
+     * check if you shot a chicken, show the dead chicken IMG.
+     */
     shotChicken() {
         this.world.throwableObjects.forEach((bottle) => {
             this.chicken.forEach((chicken) => {
-                if (chicken.isColliding(bottle) && !bottle.broken && chicken.alive) {
-                    this.killChicken(chicken);
-                    //-----------------------
-                    this.bottleActions(bottle);
-                }
-            })
-        })
+                chicken.isColliding(bottle) && !bottle.broken && chicken.alive && (this.killChicken(chicken), this.bottleActions(bottle));
+            });
+        });
     }
 
-    /** check if you shot the endboss and reduce the energy */
+    /**
+     * check if you shot the endboss and reduce the energy.
+     */
     shotEndboss() {
         this.world.throwableObjects.forEach((bottle) => {
-            if (this.endboss.isColliding(bottle) && !bottle.broken) {
-                this.bottleCollisionEndboss(bottle);
-            }
-        })
+            this.endboss.isColliding(bottle) && !bottle.broken && this.bottleCollisionEndboss(bottle);
+        });
     }
 
-    /** check if endboss is dead and play dead animation */
+    /**
+     * check if endboss is dead and play dead animation.
+     */
     checkEndbossDead() {
         setInterval(() => {
-            if (this.endbossDead()) {
-                this.finishTheGame();
-            }
-
+            this.endbossDead() && this.finishTheGame();
         }, 200);
         setInterval(() => {
-            if (this.endbossDead() && this.goDown) this.endboss.y += 10;
+            this.endbossDead() && this.goDown && (this.endboss.y += 10);
         }, 1000 / 30);
     }
 
-    /** set width and height to zero */
+    /**
+     * @param {object} bottleOrCoin - sets the height and width of the object to zero, it will be invisible.
+     */
     invisible(bottleOrCoin) {
         bottleOrCoin.width = 0;
-        bottleOrCoin.height = 0; // TODO geht bestimmt schöner
+        bottleOrCoin.height = 0;
     }
 
+    /**
+     * @example
+     * // The character will lose 2 energy in the 1000 / 60 interval.
+     * CharacterLoseEnergy(2);
+     * @param {number} damage - set the damage the character will lose.
+     */
     CharacterLoseEnergy(damage) {
         this.world.character.hit(damage);
         this.world.statBarHealth.setHealthPersentage(this.world.character.energy); // Zieht der StatBar leben ab, Zeigt also das richtige bild je nach Lebensprozent
@@ -152,39 +153,55 @@ class CheckCollosion {
         }, 100);
     }
 
+    /**
+     * Play smallChickenKillSound and load an other IMG for the chicken.
+     * @param {class} chicken
+     */
     smallChickenDead(chicken) {
         this.smallChickenKillSound.play();
         this.smallChickenKillSound.volume = 0.3;
         chicken.loadImg('assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
     }
 
+    /**
+     * If the chicken is still alive, the chicken will die.
+     * And the character will jump up.
+     * @param {class} chicken
+     */
     jumpOnChicken(chicken) {
-        if (!chicken.dead) { // wenn ich drauf springe
+        if (!chicken.dead) {
             this.killChicken(chicken);
-            this.world.character.speedY = 10; // springt ein bisschen nach oben nachden man auf ein chicken gesprungen ist
+            this.world.character.speedY = 10;
         }
     }
 
+    /**
+     * Play chickenKillSound and load an other IMG for the chicken.
+     * @param {class} chicken
+     */
     chickenDead(chicken) {
         this.chickenKillSound.play();
         this.chickenKillSound.volume = 0.3;
         chicken.loadImg('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
     }
 
+    /**
+     * @param {class} chicken
+     */
     killChicken(chicken) {
         chicken.alive = false;
-        if (chicken instanceof SmallChicken) {
-            this.smallChickenDead(chicken);
-        } else {
-            this.chickenDead(chicken);
-        }
+        chicken instanceof SmallChicken ? this.smallChickenDead(chicken) : this.chickenDead(chicken);
         chicken.speed = 0;
-        clearInterval(chicken.moveLeftInterval); //stoppt die Intervalle
-        clearInterval(chicken.playAnimationInterval); //stoppt die Intervalle
-        clearInterval(chicken.jumpInterval); //stoppt die Intervalle
-        chicken.dead = true; // damit der keinen schaden mehr macht
+        clearInterval(chicken.moveLeftInterval); //stops the intervals
+        clearInterval(chicken.playAnimationInterval); //stops the intervals
+        clearInterval(chicken.jumpInterval); //stops the intervals
+        chicken.dead = true; // it doesn't do any more damage
     }
 
+    /**
+     * Play the splash animation and after 500 ms the bottle will be invisible.
+     * @param {class} bottle
+     */
     bottleActions(bottle) {
         setTimeout(() => {
             bottle.flying = false;
@@ -199,25 +216,36 @@ class CheckCollosion {
         }, 500);
     }
 
+    /**
+     * If the endboss is still alive and hit the character, the char will lose energy.
+     * Play the endboss attack animation.
+     * @param {class} endboss
+     */
     collissionEndboss(endboss) {
-        if (!endboss.dead) { // wenn der endboss noch lebt
+        if (!endboss.dead) {
             this.CharacterLoseEnergy(2);
-            endboss.attackIntervalActive = true; // spiele die attack animation
-            endboss.walkingIntervalActive = false; // stoppt die walking animation
+            endboss.attackIntervalActive = true; // play the attack animation
+            endboss.walkingIntervalActive = false; // stops the walking animation
         }
     }
 
+    /**
+     * @param {class} endboss
+     */
     noCollisionEndboss(endboss) {
         if (!endboss.alertIntervalActive && !endboss.dead) {
-            endboss.attackIntervalActive = false; // stoppt die attack animation
-            if (!endboss.hurtIntervalActive && !this.endbossDead()) { //TODO
-                endboss.walkingIntervalActive = true; // startet die walking animation
+            endboss.attackIntervalActive = false; // stops the attack animation
+            if (!endboss.hurtIntervalActive && !this.endbossDead()) {
+                endboss.walkingIntervalActive = true; // start the walking animation
             }
-            endboss.moveLeft(); // läuft nach links
-            this.world.level.levelEnd = endboss.x; // damit kann pepe nicht hinter den endboss laufen
+            endboss.moveLeft(); // runs to the left
+            this.world.level.levelEnd = endboss.x; // so the char can't run behind the endboss
         }
     }
 
+    /**
+     * @param {class} coin
+     */
     collisionCoin(coin) {
         this.invisible(coin);
         this.updateCoinCounter();
@@ -234,6 +262,9 @@ class CheckCollosion {
         this.pickCoinSound.volume = 0.3;
     }
 
+    /**
+     * @param {class} bottle
+     */
     collisionBottle(bottle) {
         this.invisible(bottle);
         this.updateBottleCounter();
@@ -270,6 +301,9 @@ class CheckCollosion {
         this.barbedWireSound.pause();
     }
 
+    /**
+     * @param {class} bottle
+     */
     bottleCollisionEndboss(bottle) {
         this.updateEndbossEnergy();
         this.bottleActions(bottle);
@@ -277,8 +311,8 @@ class CheckCollosion {
     }
 
     updateEndbossEnergy() {
-        this.endboss.hit(0.60);
-        this.world.statBarEndboss.setEndbossPersentage(this.endboss.energy)
+        this.endboss.hit(0.6);
+        this.world.statBarEndboss.setEndbossPersentage(this.endboss.energy);
     }
 
     finishTheGame() {
@@ -288,21 +322,22 @@ class CheckCollosion {
 
     endbossAnimationsAndSound() {
         setTimeout(() => {
-            if (this.endboss.currentImgEndbossDead <= 2) { // er soll nach dem dritten Bild wieder aufhören
-                this.endbossDeadAnimation()
+            if (this.endboss.currentImgEndbossDead <= 2) {
+                // it should stop after the third frame
+                this.endbossDeadAnimation();
                 this.endbossSound();
             }
         }, 750);
-        clearInterval(this.endboss.playAnimationInterval); //stoppt die Intervalle
+        clearInterval(this.endboss.playAnimationInterval); //stops the intervals
     }
 
     openWinGameScreen() {
         setTimeout(() => {
-            if (!this.openWinGame) { // sonst wird es immer und immer wieder geöffnet
-                openWinGame()
+            if (!this.openWinGame) {
+                // otherwise it will be opened over and over again
+                openWinGame();
                 this.openWinGame = true;
             }
-            clearInterval(timerInterval);
         }, 2000);
     }
 
@@ -318,7 +353,7 @@ class CheckCollosion {
     }
 
     endbossAnimations() {
-        this.endboss.walkingIntervalActive = false; // stoppt die walking Animation
-        this.endboss.hurtIntervalActive = true; //Spielt die Hurt Animation
+        this.endboss.walkingIntervalActive = false; // stops the walking animation
+        this.endboss.hurtIntervalActive = true; //start the hurt animation
     }
 }

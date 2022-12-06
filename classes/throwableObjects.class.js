@@ -1,6 +1,5 @@
 class ThrowableObjects extends MovableObject {
-
-    speedX = 13; // Speed nach rechts/links
+    speedX = 13;
     otherDirection2 = false;
 
     imagesFlying = [
@@ -36,49 +35,29 @@ class ThrowableObjects extends MovableObject {
         this.width = 80;
         this.height = 80;
         this.otherDirection2 = otherDirection;
-        if (short && !this.otherDirection2) { // Wenn ich nach links gucke wirft er immer nur kurz
-            this.speedX -= 7;
-        }
+        short && !this.otherDirection2 && (this.speedX -= 7);
+        // If I look to the left, he only ever throws briefly
         this.animateBottle();
         this.throw();
     }
 
     throw () {
         this.bottleSounds();
-        this.speedY = 15; // speed nach oben
+        this.speedY = 15; // speed up
         this.applyGravity();
-        if (!this.otherDirection2) { // throw right
-            setInterval(() => {
-                this.x += this.speedX;
-            }, 1000 / 25)
-        } else { // throw left
-            setInterval(() => {
-                this.x -= this.speedX - 5;
-            }, 1000 / 25)
-        }
+        if (!this.otherDirection2) setInterval(() => (this.x += this.speedX), 1000 / 25);
+        // throw right
+        else setInterval(() => (this.x -= this.speedX - 5), 1000 / 25);
+        // throw left
     }
 
     animateBottle() {
-        setInterval(() => {
-            if (this.flying) {
-                this.playAnimation(this.imagesFlying);
-            }
-        }, 70)
-        setInterval(() => {
-            if (this.splash) {
-                this.playAnimation(this.imagesSplash);
-            }
-        }, 200)
+        setInterval(() => this.flying && this.playAnimation(this.imagesFlying), 70);
+        setInterval(() => this.splash && this.playAnimation(this.imagesSplash), 200);
     }
 
     bottleSounds() {
-        if (this.flying) {
-            this.throwBottleSound.play();
-            this.throwBottleSound.volume = 0.2;
-        }
-        if (this.splash) {
-            this.brokenBottleSound.play();
-            this.brokenBottleSound.volume = 0.1;
-        }
+        this.flying && (this.throwBottleSound.play(), (this.throwBottleSound.volume = 0.2));
+        this.splash && (this.brokenBottleSound.play(), (this.brokenBottleSound.volume = 0.1));
     }
 }

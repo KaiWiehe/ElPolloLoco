@@ -20,7 +20,12 @@ class StatBarEndboss extends drawableObjects {
         this.height = 50;
     }
 
-    //setHealthPersentage(50);
+    /**
+     * @example
+     * setEndbossPersentage(50);
+     * //shows the 50% IMG
+     * @param {number} persentage
+     */
     setEndbossPersentage(persentage) {
         this.percentage = persentage; // => 0...
         let path = this.imagesEndbossBar[this.resolveImgIndex()];

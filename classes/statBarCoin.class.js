@@ -11,7 +11,8 @@ class StatBarCoin extends drawableObjects {
 
     /* #############################################   Funktionen   ############################################# */
 
-    constructor() { //backgroundPath, x, y, width, heightTODO
+    constructor() {
+        //backgroundPath, x, y, width, heightTODO
         super().loadImgArray(this.imagesCoin);
         this.setCoinPersentage(0);
         this.x = 10;
@@ -20,7 +21,12 @@ class StatBarCoin extends drawableObjects {
         this.height = 50;
     }
 
-    //setHealthPersentage(50);
+    /**
+     * @example
+     * setCoinPersentage(50);
+     * //shows the 50% IMG
+     * @param {number} persentage
+     */
     setCoinPersentage(persentage) {
         this.percentage = persentage; // => 0...
         let path = this.imagesCoin[this.resolveImgIndex()];
