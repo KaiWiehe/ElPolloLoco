@@ -61,7 +61,6 @@ class MovableObject extends drawableObjects {
         this.currentImgEndbossHurt++;
     }
 
-    //gravity
     applyGravity() {
         setInterval(() => {
             this.gravityCharacterAndThrowableObjects();
@@ -101,6 +100,9 @@ class MovableObject extends drawableObjects {
         }
     }
 
+    /**
+     * @param {number} jumpHeight
+     */
     jump(jumpHeight) {
         this.speedY = jumpHeight;
     }
@@ -167,7 +169,13 @@ class MovableObject extends drawableObjects {
         }, 5000);
     }
 
+    /**
+     * true = moveLeft.
+     * false = moveRight.
+     * @param {boolean} moveLeft
+     */
     moveLeftOrRight(moveLeft) {
-        play && moveLeft ? ((this.otherDirection = false), this.moveLeft()) : play && ((this.otherDirection = true), this.moveRight());
+        if (play && moveLeft)(this.otherDirection = false), this.moveLeft();
+        else if (play)(this.otherDirection = true), this.moveRight();
     }
 }

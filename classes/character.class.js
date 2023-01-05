@@ -253,7 +253,7 @@ class Character extends MovableObject {
     isHurtActions() {
         this.playAnimation(this.imagesHit);
         this.idleCounter = 0;
-        this.hitSound.play();
+        play && this.hitSound.play();
         this.walkingSound.volume = 0;
     }
 

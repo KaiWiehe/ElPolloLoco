@@ -12,7 +12,6 @@ class StatBarHealth extends drawableObjects {
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {
-        //backgroundPath, x, y, width, heightTODO
         super().loadImgArray(this.imagesHealth);
         this.setHealthPersentage(100);
         this.x = 10;

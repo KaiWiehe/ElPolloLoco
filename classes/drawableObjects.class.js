@@ -44,10 +44,16 @@ class drawableObjects {
         });
     }
 
+    /**
+     * @param {canvas} ctx
+     */
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
+    /**
+     * @param {canvas} ctx
+     */
     drawFrame(ctx) {
         if (this.canDrawFrame()) {
             ctx.beginPath();
@@ -89,6 +95,10 @@ class drawableObjects {
         }
     }
 
+    /**
+     * @param {string} path
+     * @param {class} coinOrBottle
+     */
     loadCoinOrBottle(path, width, height, coinOrBottle) {
         this.loadImg(path);
         this.x = 400 + Math.random() * 1800; // von x300 bis xZufällig werden die sachen platziert
@@ -97,6 +107,13 @@ class drawableObjects {
         this.height = height;
     }
 
+    /**
+     * @example
+     * randomNumber(1, 3)
+     * // return 1 or 2 or 3
+     * @param {number} min
+     * @param {number} max
+     */
     randomNumber(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }

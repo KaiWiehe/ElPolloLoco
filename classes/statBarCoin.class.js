@@ -12,7 +12,6 @@ class StatBarCoin extends drawableObjects {
     /* #############################################   Funktionen   ############################################# */
 
     constructor() {
-        //backgroundPath, x, y, width, heightTODO
         super().loadImgArray(this.imagesCoin);
         this.setCoinPersentage(0);
         this.x = 10;

@@ -111,7 +111,7 @@ class Endboss extends MovableObject {
             this.world && this.world.character.x >= 2000 && (this.playEndbossAttackSound = true);
             if (this.world && this.world.character.x >= 2000) {
                 clearInterval(this.playAlertInterval);
-                this.alertIntervalActive = false; // damit er losläuft
+                this.alertIntervalActive = false;
                 if (this.playEndbossAttackSound && play) {
                     this.endbossAttackSound.play();
                     this.endbossAttackSound.volume = 0.3;
