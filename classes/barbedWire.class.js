@@ -4,8 +4,9 @@ class BarbedWire extends drawableObjects {
     width = 300;
     height = 200;
 
-    /* #############################################   Funktionen   ############################################# */
+    /* #############################################   functions   ############################################# */
 
+    /** sets the correct image */
     constructor() {
         super().loadImg('assets/img/bg/barbed_wire.png');
     }

@@ -1,82 +1,40 @@
 class Character extends MovableObject {
-    imagesWalking = [
-        'assets/img/2_character_pepe/2_walk/W-21.png',
-        'assets/img/2_character_pepe/2_walk/W-22.png',
-        'assets/img/2_character_pepe/2_walk/W-23.png',
-        'assets/img/2_character_pepe/2_walk/W-24.png',
-        'assets/img/2_character_pepe/2_walk/W-25.png',
-        'assets/img/2_character_pepe/2_walk/W-26.png',
-    ];
-    imagesJumping = [
-        'assets/img/2_character_pepe/3_jump/J-31.png',
-        'assets/img/2_character_pepe/3_jump/J-32.png',
-        'assets/img/2_character_pepe/3_jump/J-33.png',
-        'assets/img/2_character_pepe/3_jump/J-34.png',
-        'assets/img/2_character_pepe/3_jump/J-35.png',
-        'assets/img/2_character_pepe/3_jump/J-36.png',
-        'assets/img/2_character_pepe/3_jump/J-37.png',
-        'assets/img/2_character_pepe/3_jump/J-38.png',
-        'assets/img/2_character_pepe/3_jump/J-39.png',
-    ];
-    imagesDead = [
-        'assets/img/2_character_pepe/5_dead/D-51.png',
-        'assets/img/2_character_pepe/5_dead/D-52.png',
-        'assets/img/2_character_pepe/5_dead/D-53.png',
-        'assets/img/2_character_pepe/5_dead/D-54.png',
-        'assets/img/2_character_pepe/5_dead/D-55.png',
-        'assets/img/2_character_pepe/5_dead/D-56.png',
-        'assets/img/2_character_pepe/5_dead/D-57.png',
-    ];
-    imagesHit = ['assets/img/2_character_pepe/4_hurt/H-41.png', 'assets/img/2_character_pepe/4_hurt/H-42.png', 'assets/img/2_character_pepe/4_hurt/H-43.png'];
+    //images
+    imagesWalking = imagesWalkingCharacter();
+    imagesJumping = imagesJumpingCharacter();
+    imagesDead = imagesDeadCharacter();
+    imagesHit = imagesHitCharacter();
+    imagesIdle = imagesIdleCharacter();
+    imagesLongIdle = imagesLongIdleCharacter();
+    //images end
 
-    imagesIdle = [
-        'assets/img/2_character_pepe/1_idle/idle/I-1.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-2.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-3.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-4.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-5.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-6.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-7.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-8.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-9.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-10.png',
-    ];
-
-    imagesLongIdle = [
-        'assets/img/2_character_pepe/1_idle/long_idle/I-11.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-12.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-13.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-14.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-15.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-16.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-17.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-18.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-19.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-20.png',
-    ];
-
-    // ##########################################################################################################
-
-    speed = 3;
-
+    //sounds
     walkingSound = new Audio('assets/audio/running.wav');
     hitSound = new Audio('assets/audio/hit.wav');
     jumpingSound = new Audio('assets/audio/jump.wav');
     dieSound = new Audio('assets/audio/die.m4a');
     snoreSound = new Audio('assets/audio/snore.mp3');
 
+    //varables for sounds
     playWalkingSound = false;
     playhitSound = false;
     playjumpingSound = false;
     playdieSound = false;
     playsnoreSound = false;
+    //sounds end
 
+    //low number = slow speed
+    //high number = fast speed
+    speed = 3;
+
+    //the hitbox offset
     offset = {
         top: 60,
         bottom: 5,
         left: 15,
         right: 20,
     };
+
 
     bottleShortOrLong;
 
@@ -85,7 +43,7 @@ class Character extends MovableObject {
 
     idleCounter = 0;
 
-    /* #############################################   Funktionen   ############################################# */
+    /* #############################################   functions   ############################################# */
 
     constructor() {
         super().loadImg(this.imagesWalking[0]);
@@ -99,30 +57,44 @@ class Character extends MovableObject {
         this.applyGravity();
     }
 
+    /** start the intervals */
     animate() {
         this.characterMovementAndSounds();
         this.shotInterval();
         this.animationAndSoundsInterval();
     }
 
+    /** movement and sound interval */
     characterMovementAndSounds() {
         setInterval(() => {
             play && (this.CharMovementAndSounds(), this.setCamera());
         }, 1000 / 60);
     }
 
+    /**
+     * do i press the "right" key and is x less than the level end?
+     */
     allowToMoveRight() {
         return this.world.keyboard.right && this.x < this.world.level.levelEnd;
     }
 
+    /**
+     * do i press the "left" key and is x bigger than 0
+     */
     allowToMoveLeft() {
         return this.world.keyboard.left && this.x > 0;
     }
 
+    /**
+     * do i press the "space" key and is the character in the air
+     */
     allowToJump() {
         return this.world.keyboard.space && !this.isCharacterInAir(265);
     }
 
+    /**
+     * play the walking sound
+     */
     playWalkingSounds() {
         if (!this.playWalkingSound) {
             this.walkingSound.currentTime = 0.3;
@@ -132,6 +104,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * play the jump sound
+     */
     playJumpSound() {
         this.walkingSound.volume = 0;
         if (!this.playjumpingSound) {
@@ -144,6 +119,9 @@ class Character extends MovableObject {
         this.snoreSound.pause();
     }
 
+    /**
+     * character movement and the matching sound
+     */
     CharMovementAndSounds() {
         if (this.allowToMoveRight()) {
             this.moveRight();
@@ -185,12 +163,11 @@ class Character extends MovableObject {
         }, 100);
     }
 
+    /**
+     * do i press the "shot/shortShot" key and it's not in timeout 
+     */
     allowToShot() {
         return (this.world.keyboard.shot && !this.timeout) || (this.world.keyboard.shortShot && !this.timeout);
-    }
-
-    allowToLongShot() {
-        return this.world.keyboard.shot && this.world.bottleCounter > 0;
     }
 
     /**
@@ -206,6 +183,16 @@ class Character extends MovableObject {
         }, 500);
     }
 
+    /**
+     * do i press the "shot" key and you have bottles
+     */
+    allowToLongShot() {
+        return this.world.keyboard.shot && this.world.bottleCounter > 0;
+    }
+
+    /**
+     * do i press the "shortShot" key and you have bottles
+     */
     allowToShortShot() {
         return this.world.keyboard.shortShot && this.world.bottleCounter > 0;
     }
@@ -226,6 +213,9 @@ class Character extends MovableObject {
         this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
     }
 
+    /**
+     * plays the right animation
+     */
     animationAndSoundsInterval() {
         setInterval(() => {
             if (this.isDead()) {
@@ -241,6 +231,9 @@ class Character extends MovableObject {
         }, 105);
     }
 
+    /**
+     * if the character is dead do this
+     */
     deadActions() {
         this.playAnimation(this.imagesDead);
         if (!this.gameover) {
@@ -250,6 +243,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * if the character is hurt do this
+     */
     isHurtActions() {
         this.playAnimation(this.imagesHit);
         this.idleCounter = 0;
@@ -257,6 +253,9 @@ class Character extends MovableObject {
         this.walkingSound.volume = 0;
     }
 
+    /**
+     * plays the jump animation and reset the idleCounter
+     */
     jumpAnimation() {
         this.playAnimationJumping(this.imagesJumping);
         this.idleCounter = 0;
@@ -275,10 +274,16 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * do i press the "right/left" key
+     */
     CharacterMoveLeftOrRight() {
         return this.world.keyboard.right || this.world.keyboard.left;
     }
 
+    /**
+     * plays the walk animation
+     */
     walkAnimation() {
         this.playAnimation(this.imagesWalking);
         this.idleCounter = 0;
@@ -286,6 +291,9 @@ class Character extends MovableObject {
         this.snoreSound.pause();
     }
 
+    /**
+     * plays the idle animation/sound and then the longIdle animation/sound
+     */
     idleAnimationAndSnoreSound() {
         if (this.idleCounter < 10 && play) {
             this.playAnimation(this.imagesIdle);

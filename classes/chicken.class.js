@@ -4,12 +4,10 @@ class Chicken extends MovableObject {
     height = 50;
     width = 50;
 
-    imagesWalking = [
-        'assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-        'assets/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
-        'assets/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png',
-    ];
-
+    //images
+    imagesWalking = imagesWalkingChicken();
+    //images end
+    // hitbox offset
     offset = {
         top: 5,
         bottom: 10,
@@ -27,7 +25,7 @@ class Chicken extends MovableObject {
 
     alive = true;
 
-    /* #############################################   Funktionen   ############################################# */
+    /* #############################################   functions   ############################################# */
 
     constructor() {
         super().loadImg(this.imagesWalking[0]);

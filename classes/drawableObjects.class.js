@@ -15,7 +15,7 @@ class drawableObjects {
 
     world;
 
-    // der Rahmen um den Enemy, nicht der Rahmen um das Bild
+    // hitbox offset
     offset = {
         top: 0,
         bottom: 0,
@@ -23,7 +23,7 @@ class drawableObjects {
         right: 0,
     };
 
-    /* #############################################   Funktionen   ############################################# */
+    /* #############################################   functions   ############################################# */
 
     /**
      * @param {string} path

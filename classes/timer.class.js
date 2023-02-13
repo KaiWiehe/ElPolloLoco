@@ -5,6 +5,8 @@ class Timer {
     timerInterval;
     timerContainer;
 
+    /* #############################################   functions   ############################################# */
+
     startTimer() {
         clearInterval(this.timerInterval);
         this.timerInterval = setInterval(() => {

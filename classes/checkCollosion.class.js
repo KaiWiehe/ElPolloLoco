@@ -5,6 +5,7 @@ class CheckCollosion {
 
     openWinGame = false;
 
+    //sounds
     chickenKillSound = new Audio('assets/audio/chickenKill.mp3');
     smallChickenKillSound = new Audio('assets/audio/smallChickenKill.m4a');
     endbossKillSound = new Audio('assets/audio/endbossKill.mp3');
@@ -13,11 +14,18 @@ class CheckCollosion {
     pickBottleSound = new Audio('assets/audio/pickBottle.wav');
 
     playbarbedWireSound = false;
+    //sounds end
 
     goDown = false;
 
     barbedWire;
 
+    /* #############################################   functions   ############################################# */
+
+    /**
+     * 
+     * @param {object} world - to connect the class world
+     */
     constructor(world) {
         this.world = world;
         this.barbedWire = this.world.level.clouds[7];
@@ -257,6 +265,9 @@ class CheckCollosion {
         this.world.statBarCoin.setCoinPersentage(this.world.coinCounter);
     }
 
+    /**
+     * plays the coin sound
+     */
     coinSounds() {
         this.pickCoinSound.play();
         this.pickCoinSound.volume = 0.3;
@@ -276,16 +287,25 @@ class CheckCollosion {
         this.world.statBarBottle.setBottlePersentage(this.world.bottleCounter);
     }
 
+    /**
+     * plays the bottle sound
+     */
     bottleSounds() {
         this.pickBottleSound.play();
         this.pickBottleSound.volume = 0.4;
     }
 
+    /**
+     * hit the character and plays the barbedWireSound
+     */
     collisionBarbedWire() {
         this.CharacterLoseEnergy(0.5);
         this.barbedWireSounds();
     }
 
+    /**
+     * plays the barbedWireSound
+     */
     barbedWireSounds() {
         if (!this.playbarbedWireSound) {
             this.barbedWireSound.play();
@@ -295,6 +315,9 @@ class CheckCollosion {
         }
     }
 
+    /**
+     * reset the barbed wire
+     */
     noCollisionBarbedWire() {
         this.playbarbedWireSound = false;
         this.barbedWireSound.currentTime = 0;
@@ -310,11 +333,17 @@ class CheckCollosion {
         this.endbossAnimations();
     }
 
+    /**
+     * hit the endboss and update the statbar
+     */
     updateEndbossEnergy() {
         this.endboss.hit(0.6);
         this.world.statBarEndboss.setEndbossPersentage(this.endboss.energy);
     }
 
+    /**
+     * if you kill the endboss 
+     */
     finishTheGame() {
         this.endbossAnimationsAndSound();
         this.openWinGameScreen();
@@ -347,6 +376,9 @@ class CheckCollosion {
         this.goDown = true;
     }
 
+    /**
+     * plays the endboss sound
+     */
     endbossSound() {
         this.endbossKillSound.play();
         this.endbossKillSound.volume = 0.3;

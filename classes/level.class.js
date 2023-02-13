@@ -8,6 +8,8 @@ class Level {
 
     levelEnd = 719 * 4;
 
+    /* #############################################   functions   ############################################# */
+
     constructor(chickens, clouds, background, coin, bottle, endboss) {
         this.chickens = chickens;
         this.clouds = clouds;

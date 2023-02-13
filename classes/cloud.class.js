@@ -4,7 +4,7 @@ class Cloud extends MovableObject {
     width = 500;
     height = 300;
 
-    /* #############################################   Funktionen   ############################################# */
+    /* #############################################   functions   ############################################# */
 
     constructor() {
         super().loadImg('assets/img/5_background/layers/4_clouds/1.png');

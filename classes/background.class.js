@@ -5,8 +5,14 @@ class Background extends MovableObject {
     width = 720;
     height = 480;
 
-    /* #############################################   Funktionen   ############################################# */
+    /* #############################################   functions   ############################################# */
 
+    /**
+     * sets the correct image and positions it
+     * @param {string} backgroundPath 
+     * @param {number} x 
+     * @param {number} y 
+     */
     constructor(backgroundPath, x, y) {
         super().loadImg(backgroundPath);
         this.x = x;

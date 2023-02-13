@@ -8,7 +8,7 @@ class World {
     throwableObjects = [];
     checkCollosion = new CheckCollosion(this);
 
-    /* ########################################################################################################## */
+    /* ################################################*/
 
     canvas;
     ctx;
@@ -18,7 +18,7 @@ class World {
     coinCounter = 0;
     bottleCounter = 0;
 
-    /* #############################################   Funktionen   ############################################# */
+    /* #############################################   functions   ############################################# */
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d'); // makes the canvas a 2d map and adds it to the variable ctx
