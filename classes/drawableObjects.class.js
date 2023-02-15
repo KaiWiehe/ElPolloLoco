@@ -26,7 +26,7 @@ class drawableObjects {
     /* #############################################   functions   ############################################# */
 
     /**
-     * @param {string} path
+     * @param {string} path - an img path
      */
     loadImg(path) {
         this.img = new Image();
@@ -34,10 +34,10 @@ class drawableObjects {
     }
 
     /**
-     * @param {array} arr
+     * @param {array} arr - an array with img paths
      */
     loadImgArray(arr) {
-        arr.forEach((path) => {
+        arr.forEach(path => {
             let img = new Image();
             img.src = path;
             this.imageCache[path] = img;
@@ -80,19 +80,12 @@ class drawableObjects {
     }
 
     resolveImgIndex() {
-        if (this.percentage == 100) {
-            return 5;
-        } else if (this.percentage >= 80) {
-            return 4;
-        } else if (this.percentage >= 60) {
-            return 3;
-        } else if (this.percentage >= 40) {
-            return 2;
-        } else if (this.percentage >= 20) {
-            return 1;
-        } else {
-            return 0;
-        }
+        if (this.percentage == 100) return 5
+        else if (this.percentage >= 80) return 4
+        else if (this.percentage >= 60) return 3
+        else if (this.percentage >= 40) return 2
+        else if (this.percentage >= 20) return 1
+        else return 0
     }
 
     /**
@@ -116,5 +109,16 @@ class drawableObjects {
      */
     randomNumber(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    /**
+     * to execute this one line with each subarray 
+     * if you have more than one imgArray
+     * @param {Array} arr - an array filled with arrays - for example: [this.imagesWalking, this.imagesAttack];
+     */
+    loadImages(arr) {
+        arr.forEach(el => {
+            this.loadImgArray(el);
+        });
     }
 }

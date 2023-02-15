@@ -4,86 +4,22 @@ let keyboard = new Keyboard();
 let play = false;
 let timer = new Timer();
 
+//audio
 windSound = new Audio('assets/audio/wind.mp3');
 loseSound = new Audio('assets/audio/lose.wav');
 winSound = new Audio('assets/audio/win.wav');
+//audio end
 
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    mobileControlling();
+    mobileControl();
 }
 
 window.addEventListener('load', () => {
     let loader = document.getElementById('loader');
     loader.classList.add('d-none');
 });
-
-window.addEventListener('keydown', (e) => {
-    if (e.key === 'a') keyboard.left = true;
-    else if (e.key === 'ArrowLeft') keyboard.left = true;
-    else if (e.key === 'd') keyboard.right = true;
-    else if (e.key === 'ArrowRight') keyboard.right = true;
-    else if (e.key === 's') keyboard.down = true;
-    else if (e.key === 'ArrowDown') keyboard.down = true;
-    else if (e.keyCode === 32) keyboard.space = true;
-    else if (e.key === 'ArrowUp') keyboard.space = true;
-    else if (e.key === 'e') keyboard.shot = true;
-    else if (e.key === 'r') keyboard.shortShot = true;
-});
-
-window.addEventListener('keyup', (e) => {
-    if (e.key === 'a') keyboard.left = false;
-    else if (e.key === 'ArrowLeft') keyboard.left = false;
-    else if (e.key === 'd') keyboard.right = false;
-    else if (e.key === 'ArrowRight') keyboard.right = false;
-    else if (e.key === 's') keyboard.down = false;
-    else if (e.key === 'ArrowDown') keyboard.down = false;
-    else if (e.keyCode === 32) keyboard.space = false;
-    else if (e.key === 'ArrowUp') keyboard.space = false;
-    else if (e.key === 'e') keyboard.shot = false;
-    else if (e.key === 'r') keyboard.shortShot = false;
-});
-
-function mobileControlling() {
-    canvas.addEventListener('touchstart', (e) => e.preventDefault());
-
-    document.getElementById('mobileLeft').addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.left = true;
-    });
-
-    document.getElementById('mobileRight').addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.right = true;
-    });
-
-    document.getElementById('mobileShot').addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.shot = true;
-    });
-
-    document.getElementById('mobileSpace').addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.space = true;
-    });
-
-    document.getElementById('mobileLeft').addEventListener('touchend', (e) => {
-        keyboard.left = false;
-    });
-
-    document.getElementById('mobileRight').addEventListener('touchend', (e) => {
-        keyboard.right = false;
-    });
-
-    document.getElementById('mobileShot').addEventListener('touchend', (e) => {
-        keyboard.shot = false;
-    });
-
-    document.getElementById('mobileSpace').addEventListener('touchend', (e) => {
-        keyboard.space = false;
-    });
-}
 
 function reload() {
     window.location.reload();

@@ -6,7 +6,8 @@ class Character extends MovableObject {
     imagesHit = imagesHitCharacter();
     imagesIdle = imagesIdleCharacter();
     imagesLongIdle = imagesLongIdleCharacter();
-    //images end
+    imageArray = [this.imagesWalking, this.imagesJumping, this.imagesDead, this.imagesHit, this.imagesIdle, this.imagesLongIdle]
+        //images end
 
     //sounds
     walkingSound = new Audio('assets/audio/running.wav');
@@ -47,12 +48,7 @@ class Character extends MovableObject {
 
     constructor() {
         super().loadImg(this.imagesWalking[0]);
-        this.loadImgArray(this.imagesWalking);
-        this.loadImgArray(this.imagesJumping);
-        this.loadImgArray(this.imagesDead);
-        this.loadImgArray(this.imagesHit);
-        this.loadImgArray(this.imagesIdle);
-        this.loadImgArray(this.imagesLongIdle);
+        this.loadImages(this.imageArray)
         this.animate();
         this.applyGravity();
     }

@@ -2,9 +2,11 @@ class ThrowableObjects extends MovableObject {
     speedX = 13;
     otherDirection2 = false;
 
+    //images
     imagesFlying = imagesFlying();
-
     imagesSplash = imagesSplash();
+    imageArray = [this.imagesFlying, this.imagesSplash]
+        //images end
 
     flying = true;
     splash = false;
@@ -18,8 +20,7 @@ class ThrowableObjects extends MovableObject {
 
     constructor(x, y, otherDirection, short) {
         super().loadImg('assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
-        this.loadImgArray(this.imagesFlying);
-        this.loadImgArray(this.imagesSplash);
+        this.loadImages(this.imageArray)
         this.x = x;
         this.y = y;
         this.width = 80;

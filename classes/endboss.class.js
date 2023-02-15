@@ -10,6 +10,7 @@ class Endboss extends MovableObject {
     imagesAttack = imagesAttackEndboss();
     imagesHurt = imagesHurtEndboss();
     imagesDead = imagesDeadEndboss();
+    imageArray = [this.imagesAlert, this.imagesWalking, this.imagesAttack, this.imagesHurt, this.imagesDead];
     //images end
     // hitbox offset
     offset = {
@@ -41,11 +42,7 @@ class Endboss extends MovableObject {
 
     constructor() {
         super().loadImg(this.imagesWalking[0]);
-        this.loadImgArray(this.imagesAlert);
-        this.loadImgArray(this.imagesWalking);
-        this.loadImgArray(this.imagesAttack);
-        this.loadImgArray(this.imagesHurt);
-        this.loadImgArray(this.imagesDead);
+        this.loadImages(this.imageArray)
         this.alert();
         this.stopAlert();
         this.animations();
