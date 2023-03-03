@@ -4,7 +4,7 @@ class MovableObject extends drawableObjects {
 
     otherDirection = false;
 
-    //Gravitation
+    //Gravity
     speedY = 0;
     acceleration = 2;
 

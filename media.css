@@ -26,11 +26,12 @@
     li {
         padding: 20px 0 20px 37px
     }
-    .li-right,
-    .li-left,
-    .li-jump,
-    .li-throw,
-    .li-throw-short {
+    .liRight,
+    .liLeft,
+    .liJump,
+    .liThrow,
+    .liThrowShort,
+    .liOpenSettins {
         background-size: 25%;
     }
     li.a {

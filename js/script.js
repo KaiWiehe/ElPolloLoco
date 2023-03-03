@@ -14,6 +14,7 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     mobileControl();
+    openSettingsInterval();
 }
 
 window.addEventListener('load', () => {
@@ -62,9 +63,22 @@ function gameOver() {
     //Because the endboss dies shortly after
 }
 
+/**
+ * opens the settings on keyboardClick
+ */
+function openSettingsInterval() {
+    setInterval(() => {
+        keyboard.openMenu && openSettings()
+    }, 60 / 1000);
+}
+
+/**
+ * opens the setting
+ */
 function openSettings() {
     closeAll();
     play = false;
+    windSound.pause();
     settings.classList.remove('d-none');
 }
 
@@ -138,7 +152,7 @@ function mobile() {
 
 function fullscreen() {
     closeAll();
-    canvas.style = 'border: 0;border-radius: unset';
+    canvas.style = "border: 0px;border-radius: unset;max-height: 100vh;";
     startScreen.classList.remove('d-none');
     let contentContainer = document.getElementById('contentContainer');
     enterFullscreen(contentContainer);

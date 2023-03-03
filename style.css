@@ -94,31 +94,36 @@ ul {
     padding: 0 0 0 1rem;
 }
 
-.li-right {
+.liRight {
     background-image: url('assets/img/bg/letter-d-64.ico');
 }
 
-.li-left {
+.liLeft {
     background-image: url('assets/img/bg/letter-a-64.ico');
 }
 
-.li-jump {
+.liJump {
     background-image: url('assets/img/bg/myspace-64.png');
 }
 
-.li-throw {
+.liThrow {
     background-image: url('assets/img/bg/letter-e-64.ico');
 }
 
-.li-throw-short {
+.liThrowShort {
     background-image: url('assets/img/bg/letter-r-64.ico');
 }
 
-li.a {
+.liOpenSettins {
+    background-image: url('assets/img/bg/letter-q-64.png');
+}
+
+
+/* li.a {
     background-image: url('assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png');
     background-size: 50%;
     background-position-x: -10px;
-}
+} */
 
 li {
     margin: 0;
@@ -129,7 +134,7 @@ li {
     background-size: 40px;
 }
 
-li.a:hover {
+li.liOpenSettins:hover {
     cursor: pointer;
     transform: scale(1.1) rotate(2deg);
 }

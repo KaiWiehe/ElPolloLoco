@@ -9,6 +9,7 @@ window.addEventListener('keydown', (e) => {
     else if (e.key === 'ArrowUp') keyboard.space = true;
     else if (e.key === 'e') keyboard.shot = true;
     else if (e.key === 'r') keyboard.shortShot = true;
+    else if (e.key === 'q') keyboard.openMenu = true;
 });
 
 window.addEventListener('keyup', (e) => {
@@ -22,4 +23,5 @@ window.addEventListener('keyup', (e) => {
     else if (e.key === 'ArrowUp') keyboard.space = false;
     else if (e.key === 'e') keyboard.shot = false;
     else if (e.key === 'r') keyboard.shortShot = false;
+    else if (e.key === 'q') keyboard.openMenu = false;
 });
