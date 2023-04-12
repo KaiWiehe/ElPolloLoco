@@ -115,12 +115,15 @@
             </div>
             <div class="winButton"><button class="btn" onclick="reload()">Neues Spiel?</button></div>
         </div>
-        <div id="history" class="history d-none">Geschichte<button class="btn" onclick="reload()">Neues Spiel?</button></div>
-        <div id="settings" class="settings d-none"><span>Fullscreen:</span><img src="assets/img/bg/enter_fullscreen.png" onclick="fullscreen()"><button class="btn" onclick="reload()">Neues Spiel?</button></div>
-        <div id="bestPlayer" class="bestPlayer d-none">
-            Hier könnte dein Name stehen, tut er aber nicht!
-            <span>Platz 1: Kai Wiehe</span>
-            <button class="btn" onclick="reload()">Neues Spiel?</button></div>
+        <div id="settings" class="settings d-none">
+            <div>
+                <span>Fullscreen:</span>
+                <img src="assets/img/bg/enter_fullscreen.png" onclick="fullscreen()">
+            </div>
+            <span class="error" id="error"></span>
+            <button class="settingBtn" onclick="reload()">Neues Spiel?</button>
+        </div>
+
     </div>
 </body>
 

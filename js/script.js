@@ -3,6 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let play = false;
 let timer = new Timer();
+let gameStarted = false;
 
 //audio
 windSound = new Audio('assets/audio/wind.mp3');
@@ -41,6 +42,7 @@ function closeAll() {
 }
 
 function startGame() {
+    gameStarted = true;
     closeAll();
     windSound.play();
     windSound.volume = 0.3;
@@ -80,6 +82,7 @@ function openSettings() {
     play = false;
     windSound.pause();
     settings.classList.remove('d-none');
+    menuMobile() && buttonAktive();
 }
 
 function openWinGame() {
@@ -134,28 +137,25 @@ function menuClosed() {
 
 // -------------------------MobileMenuButton--------------------------------
 
-// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-let vh = window.innerHeight * 0.01;
-// Then we set the value in the --vh custom property to the root of the document
-document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-// We listen to the resize event
-window.addEventListener('resize', () => {
-    // We execute the same script as before
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-});
-
 function mobile() {
-    return window.innerWidth < 1000;
+    return window.innerWidth <= 1000;
+}
+
+function menuMobile() {
+    return window.innerWidth <= 720;
 }
 
 function fullscreen() {
-    closeAll();
-    canvas.style = "border: 0px;border-radius: unset;max-height: 100vh;";
-    startScreen.classList.remove('d-none');
-    let contentContainer = document.getElementById('contentContainer');
-    enterFullscreen(contentContainer);
+    if (!gameStarted) {
+        closeAll();
+        canvas.style = "border: 0px;border-radius: unset;max-height: 100vh;";
+        startScreen.classList.remove('d-none');
+        let contentContainer = document.getElementById('contentContainer');
+        enterFullscreen(contentContainer);
+    } else {
+        let err = document.getElementById('error');
+        err.innerHTML = 'To open the game in fullscreen you have to restart it first. '
+    }
 }
 
 function enterFullscreen(element) {

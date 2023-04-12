@@ -78,7 +78,7 @@
     }
 }
 
-@media only screen and (max-height: 480px) {
+@media (max-width: 1000px) {
     .settings,
     .history,
     .bestPlayer,
@@ -94,5 +94,11 @@
     }
     #timer {
         font-size: 2rem;
+    }
+}
+
+@media (hover: hover) {
+    .settings img:hover {
+        width: 5rem;
     }
 }

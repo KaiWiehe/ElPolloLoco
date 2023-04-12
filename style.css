@@ -39,20 +39,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    height: 100vh;
+    height: 100svh;
     margin: 0;
     background: url(assets/img/bg/desertBG2.png);
     background-size: cover;
     background-position: center;
     overflow-x: hidden;
     overflow-y: hidden;
-    min-height: 100vh;
+    min-height: 100svh;
     min-height: -webkit-fill-available;
 }
 
 .loader {
     background: black url(assets/img/bg/loader.gif) no-repeat center center;
-    height: 100vh;
+    height: 100svh;
     width: 100%;
     z-index: 99;
     position: fixed;
@@ -191,7 +191,6 @@ li.liOpenSettins:hover {
     background-color: transparent;
 }
 
-.settings,
 .history,
 .bestPlayer,
 .winGame {
@@ -205,19 +204,38 @@ li.liOpenSettins:hover {
     border-radius: 0.2rem;
     box-shadow: 1px 1px 5px 2px rgb(0 0 0 / 30%);
     width: 100vw;
-    max-height: 70vh;
+    max-height: 70svh;
     min-height: 17rem;
     font-size: 2rem;
     overflow: auto;
 }
 
+.settings {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 4rem 1rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 0.2rem;
+    box-shadow: 1px 1px 5px 2px rgb(0 0 0 / 30%);
+    width: 100vw;
+    max-height: 70svh;
+    min-height: 17rem;
+    font-size: 2rem;
+    overflow: hidden;
+}
+
+.settings div {
+    display: flex;
+    align-items: center;
+}
+
 .settings img {
     width: 4rem;
     transition: all 125ms ease-in-out;
-}
-
-.settings img:hover {
-    width: 5rem;
 }
 
 .settings span {
@@ -398,4 +416,21 @@ li.liOpenSettins:hover {
 
 .hud img {
     width: 6rem;
+}
+
+.error {
+    color: red;
+    margin: 1rem !important;
+}
+
+.settingBtn {
+    font-size: 22px;
+    color: #fff;
+    background-color: #0066CC;
+    padding: 10px 30px;
+    border: solid #0066cc 3px;
+    border-radius: 50px;
+    transition: 225ms;
+    cursor: pointer;
+    width: 13rem;
 }
