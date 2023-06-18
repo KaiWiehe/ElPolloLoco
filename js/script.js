@@ -154,7 +154,7 @@ function fullscreen() {
         enterFullscreen(contentContainer);
     } else {
         let err = document.getElementById('error');
-        err.innerHTML = 'To open the game in fullscreen you have to restart it first. '
+        err.innerHTML = 'Um das Spiel im Vollbildmodus zu öffnen, müssen Sie es zuerst neu starten.'
     }
 }
 
